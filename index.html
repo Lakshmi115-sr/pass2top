@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pass2Top — TS SSC 2026 by Digi Route</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#060818">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Poppins:wght@400;600;700;900&family=Baloo+2:wght@700;800&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root { --bg: #060818; --card: #ffffff0d; --border: #ffffff12; --orange: #FF6B35; --text: #F0F4FF; --muted: #8892A4; }
+        body { background: var(--bg); color: var(--text); font-family: 'Poppins', 'Noto Sans Telugu', sans-serif; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        .app-container { max-width: 430px; margin: 0 auto; min-height: 100vh; position: relative; padding-bottom: 90px; }
+        .nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #0a0f2e; border-top: 1px solid #ffffff15; display: flex; z-index: 100; padding: 10px 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.5); }
+        .nav-btn { flex: 1; background: none; border: none; color: var(--muted); font-size: 10px; font-weight: 700; cursor: pointer; text-align: center; }
+        .nav-btn.active { color: var(--orange); }
+        .nav-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+        .header { padding: 20px; background: linear-gradient(135deg, #0a0f2e, #1a1a4e); border-radius: 0 0 24px 24px; margin-bottom: 10px; border-bottom: 2px solid var(--orange); }
+        .logo-text { font-family: 'Baloo 2', cursive; font-size: 28px; color: var(--orange); }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin: 12px; }
+        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: 700; font-family: inherit; cursor: pointer; transition: 0.2s; }
+        .btn-orange { background: var(--orange); color: white; }
+        .sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; }
+        .sub-card { background: #ffffff08; border: 1px solid #ffffff12; border-radius: 20px; padding: 20px; text-align: center; }
+        .box { padding: 12px; border-radius: 12px; font-size: 13px; margin: 12px; border-left: 4px solid var(--orange); background: #ffffff08; }
+        .badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; background: #ffffff15; margin-right: 5px; }
+        footer { text-align: center; padding: 20px; font-size: 11px; color: var(--muted); letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const SUBJECTS = [
+            { id:"maths",   name:"Mathematics", tname:"గణితం", icon:"📐", color:"#FF6B35" },
+            { id:"physics", name:"Physics", tname:"భౌతిక శాస్త్రం", icon:"⚗️", color:"#4ECDC4" },
+            { id:"biology", name:"Biology", tname:"జీవ శాస్త్రం", icon:"🌿", color:"#2ECC71" },
+            { id:"social",  name:"Social", tname:"సాంఘిక శాస్త్రం", icon:"🗺️", color:"#45B7D1" },
+            { id:"telugu",  name:"Telugu", tname:"తెలుగు", icon:"తె", color:"#F7DC6F" },
+            { id:"hindi",   name:"Hindi", tname:"హిందీ", icon:"हि", color:"#E74C3C" },
+            { id:"english", name:"English", tname:"ఆంగ్లం", icon:"📖", color:"#9B59B6" }
+        ];
+
+        function Pass2Top() {
+            const [tab, setTab] = useState('learn');
+            const [view, setView] = useState('home');
+            const [selectedSub, setSelectedSub] = useState(null);
+
+            const renderHome = () => (
+                <div>
+                    <div className="header">
+                        <div className="logo-text">Pass2Top</div>
+                        <div style={{fontSize: '10px', opacity: 0.8}}>TELANGANA SSC 2026 · POWERED BY DIGI ROUTE</div>
+                    </div>
+
+                    {tab === 'learn' && (
+                        <div className="sub-grid">
+                            {SUBJECTS.map(s => (
+                                <div key={s.id} className="sub-card" onClick={() => {setSelectedSub(s); setView('subject');}}>
+                                    <div style={{fontSize: '32px'}}>{s.icon}</div>
+                                    <div style={{fontWeight: '700', marginTop: '10px'}}>{s.name}</div>
+                                    <div style={{fontSize: '11px', color: 'var(--muted)'}}>{s.tname}</div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {tab === 'base' && (
+                        <div className="pad">
+                            <div className="box">🏗️ <b>Base Mode:</b> Most repeated questions for 2026.</div>
+                            {SUBJECTS.map(s => (
+                                <div key={s.id} className="card" onClick={() => {setSelectedSub(s); setView('subject');}}>
+                                    <span className="badge">PASS GUARANTEED</span>
+                                    <div style={{marginTop: '8px', fontWeight: '700'}}>{s.icon} {s.name} Base</div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {tab === 'exam' && (
+                        <div className="pad">
+                            <div className="box">📝 <b>Exam Simulator:</b> Practice with Board-standard papers.</div>
+                            {SUBJECTS.map(s => (
+                                <button key={s.id} className="btn btn-orange" style={{marginBottom: '10px'}} onClick={() => {setSelectedSub(s); setView('exam');}}>
+                                    {s.name} Exam Paper
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                    <footer>© 2026 DIGI ROUTE. ALL RIGHTS RESERVED.</footer>
+                </div>
+            );
+
+            return (
+                <div className="app-container">
+                    {view === 'home' ? renderHome() : (
+                        <div style={{padding: '20px'}}>
+                            <button onClick={() => setView('home')} style={{background: 'none', color: 'white', border: 'none', fontSize: '18px', marginBottom: '20px'}}>← Back</button>
+                            <h2 style={{color: selectedSub.color}}>{selectedSub.icon} {selectedSub.name}</h2>
+                            <div className="card">
+                                <h3>Syllabus Guide</h3>
+                                <p style={{fontSize: '13px', lineHeight: '1.6', marginTop: '10px'}}>Complete chapter-wise focus for {selectedSub.name}.</p>
+                            </div>
+                            <button className="btn btn-orange">Open Study Material</button>
+                        </div>
+                    )}
+
+                    <nav className="nav">
+                        <button className={`nav-btn ${tab === 'learn' ? 'active' : ''}`} onClick={() => {setTab('learn'); setView('home');}}><span className="nav-icon">📚</span>LEARN</button>
+                        <button className={`nav-btn ${tab === 'base' ? 'active' : ''}`} onClick={() => {setTab('base'); setView('home');}}><span className="nav-icon">🏗️</span>BASE</button>
+                        <button className={`nav-btn ${tab === 'exam' ? 'active' : ''}`} onClick={() => {setTab('exam'); setView('home');}}><span className="nav-icon">📝</span>EXAM</button>
+                    </nav>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Pass2Top />);
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+        }
+    </script>
+</body>
+</html>
