@@ -1,0 +1,31 @@
+{
+  "name": "Pass2Top — Telangana SSC 2026",
+  "short_name": "Pass2Top",
+  "description": "TS Board SSC 2026 Exam Prep — Learn, Base, Edge, Exam",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#060818",
+  "theme_color": "#FF6B35",
+  "orientation": "portrait-primary",
+  "lang": "te",
+  "categories": ["education"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    { "name": "Base Tab", "url": "./index.html#base", "description": "Must Study Topics" },
+    { "name": "Edge Tab", "url": "./index.html#edge", "description": "Exam Strategy" }
+  ]
+}
