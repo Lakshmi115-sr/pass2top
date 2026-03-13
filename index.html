@@ -1,135 +1,1452 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pass2Top — TS SSC 2026 by Digi Route</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#060818">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Poppins:wght@400;600;700;900&family=Baloo+2:wght@700;800&display=swap');
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root { --bg: #060818; --card: #ffffff0d; --border: #ffffff12; --orange: #FF6B35; --text: #F0F4FF; --muted: #8892A4; }
-        body { background: var(--bg); color: var(--text); font-family: 'Poppins', 'Noto Sans Telugu', sans-serif; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
-        .app-container { max-width: 430px; margin: 0 auto; min-height: 100vh; position: relative; padding-bottom: 90px; }
-        .nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; background: #0a0f2e; border-top: 1px solid #ffffff15; display: flex; z-index: 100; padding: 10px 0; box-shadow: 0 -4px 20px rgba(0,0,0,0.5); }
-        .nav-btn { flex: 1; background: none; border: none; color: var(--muted); font-size: 10px; font-weight: 700; cursor: pointer; text-align: center; }
-        .nav-btn.active { color: var(--orange); }
-        .nav-icon { font-size: 20px; display: block; margin-bottom: 4px; }
-        .header { padding: 20px; background: linear-gradient(135deg, #0a0f2e, #1a1a4e); border-radius: 0 0 24px 24px; margin-bottom: 10px; border-bottom: 2px solid var(--orange); }
-        .logo-text { font-family: 'Baloo 2', cursive; font-size: 28px; color: var(--orange); }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin: 12px; }
-        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: 700; font-family: inherit; cursor: pointer; transition: 0.2s; }
-        .btn-orange { background: var(--orange); color: white; }
-        .sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; }
-        .sub-card { background: #ffffff08; border: 1px solid #ffffff12; border-radius: 20px; padding: 20px; text-align: center; }
-        .box { padding: 12px; border-radius: 12px; font-size: 13px; margin: 12px; border-left: 4px solid var(--orange); background: #ffffff08; }
-        .badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; background: #ffffff15; margin-right: 5px; }
-        footer { text-align: center; padding: 20px; font-size: 11px; color: var(--muted); letter-spacing: 1px; }
-    </style>
-</head>
-<body>
-    <div id="root"></div>
+import { useState, useRef } from "react";
 
-    <script type="text/babel">
-        const { useState } = React;
 
-        const SUBJECTS = [
-            { id:"maths",   name:"Mathematics", tname:"గణితం", icon:"📐", color:"#FF6B35" },
-            { id:"physics", name:"Physics", tname:"భౌతిక శాస్త్రం", icon:"⚗️", color:"#4ECDC4" },
-            { id:"biology", name:"Biology", tname:"జీవ శాస్త్రం", icon:"🌿", color:"#2ECC71" },
-            { id:"social",  name:"Social", tname:"సాంఘిక శాస్త్రం", icon:"🗺️", color:"#45B7D1" },
-            { id:"telugu",  name:"Telugu", tname:"తెలుగు", icon:"తె", color:"#F7DC6F" },
-            { id:"hindi",   name:"Hindi", tname:"హిందీ", icon:"हि", color:"#E74C3C" },
-            { id:"english", name:"English", tname:"ఆంగ్లం", icon:"📖", color:"#9B59B6" }
-        ];
+// ═══════════════════════════════════════════════════════════════════════
+//  PASS2TOP — TELANGANA SSC 2026
+//  Learn | Base | Edge | Exam
+// ═══════════════════════════════════════════════════════════════════════
 
-        function Pass2Top() {
-            const [tab, setTab] = useState('learn');
-            const [view, setView] = useState('home');
-            const [selectedSub, setSelectedSub] = useState(null);
+// ── SUBJECTS ────────────────────────────────────────────────────────────
+const SUBJECTS = [
+  { id:"maths",   name:"Mathematics",        tname:"గణితం",            icon:"📐", color:"#FF6B35" },
+  { id:"physics", name:"Physical Science",   tname:"భౌతిక శాస్త్రం",  icon:"⚗️", color:"#4ECDC4" },
+  { id:"biology", name:"Biological Science", tname:"జీవ శాస్త్రం",    icon:"🌿", color:"#2ECC71" },
+  { id:"social",  name:"Social Studies",     tname:"సాంఘిక శాస్త్రం", icon:"🗺️", color:"#45B7D1" },
+  { id:"telugu",  name:"Telugu",             tname:"తెలుగు",           icon:"తె", color:"#F7DC6F" },
+  { id:"hindi",   name:"Hindi",              tname:"హిందీ",             icon:"हि", color:"#E74C3C" },
+  { id:"english", name:"English",            tname:"ఆంగ్లం",           icon:"📖", color:"#9B59B6" },
+];
 
-            const renderHome = () => (
-                <div>
-                    <div className="header">
-                        <div className="logo-text">Pass2Top</div>
-                        <div style={{fontSize: '10px', opacity: 0.8}}>TELANGANA SSC 2026 · POWERED BY DIGI ROUTE</div>
-                    </div>
+const SYLLABUS = {
+  maths: {
+    papers: [
+      { name:"Paper I", chapters:[
+        { n:1,  title:"Real Numbers" },
+        { n:2,  title:"Sets" },
+        { n:3,  title:"Polynomials" },
+        { n:4,  title:"Pair of Linear Equations in Two Variables" },
+        { n:5,  title:"Quadratic Equations" },
+        { n:6,  title:"Progressions" },
+        { n:7,  title:"Coordinate Geometry" },
+      ]},
+      { name:"Paper II", chapters:[
+        { n:8,  title:"Similar Triangles" },
+        { n:9,  title:"Tangents and Secants to a Circle" },
+        { n:10, title:"Mensuration" },
+        { n:11, title:"Trigonometry" },
+        { n:12, title:"Applications of Trigonometry" },
+        { n:13, title:"Probability" },
+        { n:14, title:"Statistics" },
+      ]},
+    ]
+  },
+  physics: {
+    papers:[{ name:"Paper I", chapters:[
+      { n:1, title:"Reflection of Light at Curved Surfaces" },
+      { n:2, title:"Refraction of Light at Plane Surfaces" },
+      { n:3, title:"Refraction of Light at Curved Surfaces" },
+      { n:4, title:"Electric Current" },
+      { n:5, title:"Electromagnetism" },
+      { n:6, title:"Chemical Reactions and Equations" },
+      { n:7, title:"Acids, Bases and Salts" },
+      { n:8, title:"Structure of the Atom" },
+      { n:9, title:"Classification of Elements — Periodic Table" },
+      { n:10,title:"Chemical Bonding" },
+      { n:11,title:"Metals and Non-metals" },
+      { n:12,title:"Carbon and its Compounds" },
+    ]}]
+  },
+  biology: {
+    papers:[{ name:"Paper II", chapters:[
+      { n:1, title:"Nutrition" },
+      { n:2, title:"Respiration" },
+      { n:3, title:"Transportation" },
+      { n:4, title:"Excretion" },
+      { n:5, title:"Control and Coordination" },
+      { n:6, title:"Reproduction" },
+      { n:7, title:"Coordination in Life Processes" },
+      { n:8, title:"Heredity" },
+      { n:9, title:"Our Environment" },
+      { n:10,title:"Natural Resources" },
+    ]}]
+  },
+  social: {
+    papers:[
+      { name:"Paper I — History & Civics", chapters:[
+        { n:1, title:"The Nationalist Movement in Indo-China" },
+        { n:2, title:"Nationalism in India" },
+        { n:3, title:"Minerals and Energy Resources" },
+        { n:4, title:"Industries" },
+        { n:5, title:"Transport, Communication and Trade" },
+        { n:6, title:"Making of Independent India's Constitution" },
+        { n:7, title:"People's Participation in Democracy" },
+        { n:8, title:"Social Movements" },
+        { n:9, title:"The Movement for Formation of Telangana State" },
+      ]},
+      { name:"Paper II — Geography & Economics", chapters:[
+        { n:10,title:"India: Relief Features" },
+        { n:11,title:"Climate of India" },
+        { n:12,title:"Indian Rivers and Water Resources" },
+        { n:13,title:"Agriculture" },
+        { n:14,title:"Development" },
+        { n:15,title:"Money and Banking" },
+        { n:16,title:"Globalisation" },
+        { n:17,title:"Consumer Rights" },
+      ]},
+    ]
+  },
+  telugu: {
+    papers:[
+      { name:"Paper I — భాషా భాగం", chapters:[
+        { n:1,  title:"పద్యం 1 — నీతిశతకం (వేమన శతకం)" },
+        { n:2,  title:"పద్యం 2 — భాగవతం (పోతన)" },
+        { n:3,  title:"పద్యం 3 — రామాయణం / మహాభారతం" },
+        { n:4,  title:"పద్యం 4 — ఆధునిక కవిత" },
+        { n:5,  title:"గద్యం 1 — వ్యాసం (Essay)" },
+        { n:6,  title:"గద్యం 2 — కథ లేదా జీవిత చరిత్ర" },
+        { n:7,  title:"గద్యం 3 — ప్రయాణ వర్ణన / అనుభవం" },
+        { n:8,  title:"సంధులు — సవర్ణదీర్ఘ, గుణ, వృద్ధి, యణాదేశ సంధులు" },
+        { n:9,  title:"సమాసాలు — తత్పురుష, కర్మధారయ, బహువ్రీహి, ద్వంద్వ" },
+        { n:10, title:"అలంకారాలు — ఉపమ, రూపక, ఉత్ప్రేక్ష, అతిశయోక్తి, అనుప్రాస" },
+      ]},
+      { name:"Paper II — రచనా భాగం", chapters:[
+        { n:11, title:"ఛందస్సు — తేటగీతి, ఆటవెలది, సీస పద్యం లక్షణాలు" },
+        { n:12, title:"పద్యం భావం రాయడం — కవి పేరు, గ్రంథం, పదార్థాలు, భావం" },
+        { n:13, title:"గద్యం సారాంశం — మూల పాఠం 3వ వంతు మీ భాషలో" },
+        { n:14, title:"అధికారిక లేఖ — ప్రధానోపాధ్యాయుడికి, అధికారికి" },
+        { n:15, title:"అనధికారిక లేఖ — స్నేహితుడికి, బంధువులకు" },
+        { n:16, title:"వ్యాసం రాయడం — పర్యావరణం, స్వాతంత్ర్యం, విద్య, సాంకేతికత" },
+        { n:17, title:"పదాల అర్థాలు మరియు వాక్యంలో ప్రయోగం" },
+        { n:18, title:"నానార్థాలు — ఒకే పదానికి వేర్వేరు అర్థాలు" },
+        { n:19, title:"వ్యతిరేకార్థాలు (Antonyms) మరియు పర్యాయపదాలు (Synonyms)" },
+        { n:20, title:"సొంత వాక్యాలు రాయడం — దత్తపద కవిత్వం" },
+      ]},
+    ]
+  },
+  hindi: {
+    papers:[
+      { name:"Paper I", chapters:[
+        { n:1, title:"गद्य पाठ — कहानी, निबंध, जीवनी" },
+        { n:2, title:"पद्य पाठ — कविताएँ" },
+        { n:3, title:"व्याकरण — संधि" },
+        { n:4, title:"व्याकरण — समास" },
+      ]},
+      { name:"Paper II", chapters:[
+        { n:5, title:"अलंकार" },
+        { n:6, title:"कारक और विभक्ति" },
+        { n:7, title:"पत्र लेखन और निबंध" },
+        { n:8, title:"मुहावरे और लोकोक्तियाँ" },
+      ]},
+    ]
+  },
+  english: {
+    papers:[
+      { name:"Paper I", chapters:[
+        { n:1, title:"Prose Lessons" },
+        { n:2, title:"Poetry" },
+        { n:3, title:"Grammar — Tenses" },
+        { n:4, title:"Grammar — Active & Passive Voice" },
+      ]},
+      { name:"Paper II", chapters:[
+        { n:5, title:"Grammar — Reported Speech" },
+        { n:6, title:"Reading Comprehension" },
+        { n:7, title:"Letter Writing & Essay Writing" },
+        { n:8, title:"Vocabulary & Editing Skills" },
+      ]},
+    ]
+  },
+};
 
-                    {tab === 'learn' && (
-                        <div className="sub-grid">
-                            {SUBJECTS.map(s => (
-                                <div key={s.id} className="sub-card" onClick={() => {setSelectedSub(s); setView('subject');}}>
-                                    <div style={{fontSize: '32px'}}>{s.icon}</div>
-                                    <div style={{fontWeight: '700', marginTop: '10px'}}>{s.name}</div>
-                                    <div style={{fontSize: '11px', color: 'var(--muted)'}}>{s.tname}</div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+// ── BASE CONTENT — MOST REPEATED Q&A (GUARANTEED PASS) ─────────────────
+const BASE = {
+  maths: {
+    mustStudy: [
+      { topic:"Real Numbers", imp:"★★★", q:"Prove that √2 is irrational.", a:"Assume √2=p/q (HCF=1). Then p²=2q² → p even → p=2m → q²=2m² → q even. Both even contradicts HCF=1. ∴ √2 irrational.", marks:"4M", years:"2021,2022,2023,2024,2025" },
+      { topic:"Polynomials", imp:"★★★", q:"Find zeros of p(x)=x²+7x+10 and verify.", a:"(x+2)(x+5)=0. Zeros:-2,-5. Sum=-7=-7/1 ✓ Product=10=10/1 ✓", marks:"4M", years:"Every year" },
+      { topic:"Linear Equations", imp:"★★★", q:"Solve: 2x+3y=11 and 2x-4y=-24.", a:"Subtract: 7y=35→y=5. Then x=-2. Answer: x=-2, y=5", marks:"4M", years:"2023,2024,2025" },
+      { topic:"Quadratic Equations", imp:"★★★", q:"Find roots of 2x²-5x+3=0 by factorisation.", a:"(2x-3)(x-1)=0. x=3/2 or x=1", marks:"2M", years:"Every year" },
+      { topic:"Progressions", imp:"★★★", q:"Find 20th term and sum of 20 terms of AP: 1,4,7,10...", a:"a₂₀=1+19×3=58. S₂₀=10×59=590", marks:"4M", years:"2022,2023,2024,2025" },
+      { topic:"Coordinate Geometry", imp:"★★★", q:"Find distance between A(2,3) and B(6,6).", a:"d=√(16+9)=√25=5 units", marks:"2M", years:"Every year" },
+      { topic:"Similar Triangles", imp:"★★★", q:"State and prove Pythagoras Theorem.", a:"In right △, square of hypotenuse = sum of squares of other two sides. Proof using similar triangles.", marks:"8M", years:"2021,2022,2024" },
+      { topic:"Trigonometry", imp:"★★★", q:"Prove: sin²θ+cos²θ=1", a:"From right triangle: (opp/hyp)²+(adj/hyp)²=(opp²+adj²)/hyp²=hyp²/hyp²=1 ✓", marks:"2M", years:"Every year" },
+      { topic:"Statistics", imp:"★★★", q:"Find median for: 0-10(5),10-20(10),20-30(25),30-40(30),40-50(10).", a:"N=80,N/2=40. CF:5,15,40. Median class=20-30. Median=20+[(40-15)/25]×10=30", marks:"4M", years:"Every year" },
+      { topic:"Probability", imp:"★★★", q:"A card drawn from 52 cards. Find P(king) and P(red card).", a:"P(king)=4/52=1/13. P(red)=26/52=1/2", marks:"2M", years:"Every year" },
+      { topic:"Mensuration", imp:"★★★", q:"CSA of cylinder=264cm², h=14cm. Find radius.", a:"2πrh=264→r=3cm", marks:"2M", years:"2021,2022,2023" },
+      { topic:"Applications of Trigonometry", imp:"★★★", q:"From 30m away, angle of elevation of tower top is 30°. Find height.", a:"tan30°=h/30→h=10√3≈17.3m", marks:"4M", years:"Every year" },
+    ],
+    plan5days: [
+      { day:1, focus:"Real Numbers + Polynomials", target:"2 proofs + 3 zero problems", marks:"~16M" },
+      { day:2, focus:"Linear Equations + Quadratic Equations", target:"2 solve problems each", marks:"~20M" },
+      { day:3, focus:"Progressions + Coordinate Geometry", target:"AP formulas + distance/section", marks:"~18M" },
+      { day:4, focus:"Trigonometry + Applications", target:"Identities + 2 height problems", marks:"~18M" },
+      { day:5, focus:"Statistics + Probability + Mensuration", target:"Mean/Median + 2 prob problems", marks:"~28M" },
+    ]
+  },
+  physics: {
+    mustStudy: [
+      { topic:"Mirror Formula", imp:"★★★", q:"Object at 20cm from concave mirror (f=10cm). Find image distance.", a:"1/v+1/u=1/f. 1/v=1/(-10)-1/(-20)=-1/20. v=-20cm (real, inverted)", marks:"4M", years:"Every year" },
+      { topic:"Ohm's Law", imp:"★★★", q:"State Ohm's Law. 3Ω,5Ω,7Ω in series. Find equivalent resistance.", a:"V=IR at constant temp. Series: R=3+5+7=15Ω", marks:"4M", years:"Every year" },
+      { topic:"Chemical Reactions", imp:"★★★", q:"What is displacement reaction? Give example.", a:"More reactive metal displaces less reactive. Fe+CuSO₄→FeSO₄+Cu", marks:"2M", years:"Every year" },
+      { topic:"Acids Bases", imp:"★★★", q:"What is pH scale? What does pH<7 mean?", a:"pH measures acidity/basicity (0-14). pH<7=acidic, pH=7=neutral, pH>7=basic", marks:"2M", years:"Every year" },
+      { topic:"Human Eye", imp:"★★★", q:"What is myopia? How is it corrected?", a:"Myopia=near sightedness. Image forms before retina. Corrected by concave lens.", marks:"4M", years:"Every year" },
+      { topic:"Electromagnetic Induction", imp:"★★★", q:"State Faraday's Laws of electromagnetic induction.", a:"1st: EMF induced when magnetic flux changes. 2nd: Induced EMF=rate of change of flux.", marks:"4M", years:"2022,2023,2024" },
+      { topic:"Periodic Table", imp:"★★★", q:"State Modern Periodic Law.", a:"Properties of elements are periodic functions of their atomic numbers.", marks:"2M", years:"Every year" },
+      { topic:"Carbon Compounds", imp:"★★★", q:"What are allotropes of carbon? Name them.", a:"Diamond (hardest), Graphite (conductor), Fullerene (C60). Different arrangements of carbon atoms.", marks:"2M", years:"Every year" },
+    ],
+    plan5days: [
+      { day:1, focus:"Light — Reflection + Refraction", target:"Mirror formula + Snell's law", marks:"~20M" },
+      { day:2, focus:"Electricity + Electromagnetism", target:"Ohm's law + Faraday's laws", marks:"~20M" },
+      { day:3, focus:"Chemical Reactions + Acids Bases", target:"Types of reactions + pH scale", marks:"~16M" },
+      { day:4, focus:"Periodic Table + Atomic Structure", target:"Modern periodic law + Bohr model", marks:"~16M" },
+      { day:5, focus:"Metals + Carbon Compounds", target:"Reactivity series + Functional groups", marks:"~16M" },
+    ]
+  },
+  biology: {
+    mustStudy: [
+      { topic:"Photosynthesis", imp:"★★★", q:"Write equation for photosynthesis. Where does it occur?", a:"6CO₂+6H₂O→C₆H₁₂O₆+6O₂ (sunlight+chlorophyll). Occurs in chloroplasts.", marks:"4M", years:"Every year" },
+      { topic:"Double Circulation", imp:"★★★", q:"Explain double circulation in humans.", a:"Blood passes through heart twice per cycle. Pulmonary: heart→lungs→heart. Systemic: heart→body→heart.", marks:"8M", years:"Every year" },
+      { topic:"Nephron", imp:"★★★", q:"What is nephron? Explain urine formation.", a:"Nephron=functional unit of kidney. Urine formed by: 1.Filtration 2.Reabsorption 3.Secretion", marks:"4M", years:"Every year" },
+      { topic:"Nervous System", imp:"★★★", q:"What is reflex action? Give example.", a:"Automatic response to stimulus without brain involvement. Example: withdrawing hand from hot object.", marks:"2M", years:"Every year" },
+      { topic:"Mendel's Laws", imp:"★★★", q:"Explain monohybrid cross with Punnett square.", a:"Tall(TT)×Dwarf(tt)→F1:Tt(all tall)→F2:TT:Tt:tt=1:2:1. Ratio 3tall:1dwarf", marks:"8M", years:"Every year" },
+      { topic:"Reproduction", imp:"★★★", q:"Name 4 types of asexual reproduction with examples.", a:"1.Binary fission-Amoeba 2.Budding-Yeast 3.Spore formation-Rhizopus 4.Vegetative propagation-Potato", marks:"4M", years:"Every year" },
+      { topic:"Respiration", imp:"★★★", q:"Difference between aerobic and anaerobic respiration.", a:"Aerobic: needs O₂, 38ATP, CO₂+H₂O. Anaerobic: no O₂, 2ATP, lactic acid or ethanol.", marks:"4M", years:"Every year" },
+    ],
+    plan5days: [
+      { day:1, focus:"Nutrition + Respiration", target:"Photosynthesis equation + aerobic/anaerobic", marks:"~20M" },
+      { day:2, focus:"Transportation + Excretion", target:"Double circulation + nephron", marks:"~18M" },
+      { day:3, focus:"Control & Coordination", target:"Nervous system + hormones + reflex arc", marks:"~18M" },
+      { day:4, focus:"Reproduction", target:"Asexual + sexual + human reproduction", marks:"~18M" },
+      { day:5, focus:"Heredity + Environment", target:"Mendel's laws + food chains + conservation", marks:"~16M" },
+    ]
+  },
+  social: {
+    mustStudy: [
+      { topic:"Nationalism in India", imp:"★★★", q:"Write 4 causes of Non-Cooperation Movement (1920).", a:"1.Rowlatt Act 2.Jallianwala Bagh massacre 3.Khilafat issue 4.Broken WWI promises", marks:"4M", years:"Every year" },
+      { topic:"Telangana Formation", imp:"★★★", q:"When was Telangana formed? Who was first CM?", a:"2nd June 2014. K.Chandrashekar Rao was first CM.", marks:"2M", years:"Every year" },
+      { topic:"Indian Constitution", imp:"★★★", q:"Name 4 Fundamental Rights in Indian Constitution.", a:"1.Right to Equality 2.Right to Freedom 3.Right against Exploitation 4.Right to Constitutional Remedies", marks:"4M", years:"Every year" },
+      { topic:"Agriculture", imp:"★★★", q:"Difference between Kharif and Rabi crops with examples.", a:"Kharif: June-Oct, Rice/Cotton/Maize. Rabi: Oct-April, Wheat/Barley/Mustard", marks:"4M", years:"Every year" },
+      { topic:"Globalisation", imp:"★★★", q:"What is globalisation? Write 2 advantages and 2 disadvantages.", a:"Integration of world economies. Adv: more jobs, better products. Disadv: local industries suffer, inequality", marks:"4M", years:"2022,2023,2024" },
+      { topic:"Consumer Rights", imp:"★★★", q:"State any 4 rights of consumers.", a:"1.Right to safety 2.Right to information 3.Right to choose 4.Right to be heard 5.Right to redressal", marks:"4M", years:"Every year" },
+      { topic:"Money and Banking", imp:"★★★", q:"What are the functions of RBI?", a:"Issues currency, banker's bank, controls credit, manages foreign exchange, government's bank", marks:"4M", years:"Every year" },
+    ],
+    plan5days: [
+      { day:1, focus:"Nationalism in India + Indo-China", target:"Non-Cooperation + Civil Disobedience", marks:"~20M" },
+      { day:2, focus:"Constitution + Democracy", target:"Fundamental Rights + Elections", marks:"~18M" },
+      { day:3, focus:"Geography — Rivers + Climate + Agriculture", target:"Monsoon + Kharif/Rabi", marks:"~18M" },
+      { day:4, focus:"Economics — Development + Banking", target:"HDI + RBI functions", marks:"~16M" },
+      { day:5, focus:"Telangana + Consumer Rights + Globalisation", target:"2014 statehood + COPRA", marks:"~18M" },
+    ]
+  },
+  telugu: {
+    mustStudy: [
+      { topic:"సవర్ణదీర్ఘ సంధి", imp:"★★★", q:"సవర్ణదీర్ఘ సంధి నియమం రాసి రెండు ఉదాహరణలు ఇవ్వండి.", a:"నియమం: అ లేదా ఆ తర్వాత అ లేదా ఆ వస్తే రెండూ కలిసి దీర్ఘం అవుతుంది.\nఉదా 1: రామ + అయనం = రామాయణం (అ+అ=ఆ)\nఉదా 2: విద్యా + అభ్యాసం = విద్యాభ్యాసం (ఆ+అ=ఆ)\nవిగ్రహవాక్యం: రామాయణం = రాముని అయనం", marks:"2M", years:"Every year" },
+      { topic:"గుణసంధి", imp:"★★★", q:"గుణసంధి నియమం రాసి ఉదాహరణ ఇవ్వండి.", a:"నియమం: అ లేదా ఆ తర్వాత ఇ లేదా ఈ వస్తే ఏ అవుతుంది.\nఉదా: మహా + ఇంద్రుడు = మహేంద్రుడు (ఆ+ఇ=ఏ)\nఉదా: గంగా + ఈశ్వరుడు = గంగేశ్వరుడు (ఆ+ఈ=ఏ)", marks:"2M", years:"Every year" },
+      { topic:"తత్పురుష సమాసం", imp:"★★★", q:"తత్పురుష సమాసం నిర్వచనం రాసి మూడు ఉదాహరణలు ఇవ్వండి.", a:"నిర్వచనం: ఉత్తరపదం ప్రధానంగా ఉన్న సమాసం తత్పురుష సమాసం.\nఉదా 1: రాజపుత్రుడు = రాజు యొక్క పుత్రుడు\nఉదా 2: దేశభక్తుడు = దేశముపై భక్తి గలవాడు\nఉదా 3: విద్యాభ్యాసం = విద్య యొక్క అభ్యాసం", marks:"2M", years:"Every year" },
+      { topic:"కర్మధారయ సమాసం", imp:"★★★", q:"కర్మధారయ సమాసం నిర్వచనం రాసి ఉదాహరణలు ఇవ్వండి.", a:"నిర్వచనం: విశేషణ విశేష్యాలు ఒకే విభక్తిలో ఉన్న సమాసం.\nఉదా 1: నీలోత్పలం = నీలమైన ఉత్పలం (నీల+ఉత్పలం)\nఉదా 2: మహాకవి = మహుడైన కవి\nఉదా 3: సుందరవదన = సుందరమైన వదన", marks:"2M", years:"2022,2023,2024,2025" },
+      { topic:"ఉపమాలంకారం", imp:"★★★", q:"ఉపమాలంకారం నిర్వచనం, లక్షణాలు, ఉదాహరణ రాయండి.", a:"నిర్వచనం: ఒక వస్తువును మరొక వస్తువుతో పోల్చడం ఉపమాలంకారం.\nలక్షణాలు: ఉపమేయం, ఉపమానం, సాధారణ ధర్మం, ఉపమావాచకం ఉంటాయి.\nఉదా: చంద్రుని వంటి ముఖము (ముఖం=ఉపమేయం, చంద్రుడు=ఉపమానం, వంటి=ఉపమావాచకం)", marks:"4M", years:"Every year" },
+      { topic:"రూపకాలంకారం", imp:"★★★", q:"రూపకాలంకారం నిర్వచనం మరియు ఉదాహరణ రాయండి.", a:"నిర్వచనం: ఉపమేయంపై ఉపమానాన్ని ఆరోపించడం రూపకాలంకారం. పోలిక అభేదంగా చెప్పబడుతుంది.\nఉదా: 'చందమామ మొగము' — ముఖాన్నే చందమామ అని చెప్పారు (వంటి అనలేదు)\nఉపమలో వంటి ఉంటుంది, రూపకంలో ఉండదు.", marks:"4M", years:"2022,2023,2024,2025" },
+      { topic:"తేటగీతి లక్షణాలు", imp:"★★★", q:"తేటగీతి ఛందో లక్షణాలు రాయండి.", a:"గణాలు: మూడు సూర్యగణాలు + ఒక గురులఘువు\nమొత్తం అక్షరాలు: 14\nయతి స్థానం: 10వ అక్షరం వద్ద\nఉదా పద్యం: 'శ్రీరాముని చరిత్ర సేవించు వారికి' — ఇది తేటగీతి పద్యం", marks:"2M", years:"Every year" },
+      { topic:"ఆటవెలది లక్షణాలు", imp:"★★★", q:"ఆటవెలది ఛందో లక్షణాలు రాయండి.", a:"గణాలు: రెండు సూర్యగణాలు + ఒక ఇంద్రగణం + ఒక గురువు\nమొత్తం అక్షరాలు: 14\nయతి స్థానం: 8వ అక్షరం వద్ద\nఉదా: 'ఏనుగు లేనికాలమున ఇంటికి వత్తురు'", marks:"2M", years:"2022,2023,2024" },
+      { topic:"అధికారిక లేఖ", imp:"★★★", q:"పాఠశాల ప్రధానోపాధ్యాయుడికి 5 రోజుల సెలవు కోసం లేఖ రాయండి.", a:"విజయవాడ,\n14 మార్చి 2026.\n\nసేవలో,\nశ్రీ ప్రధానోపాధ్యాయులు వారికి,\nజ్ఞానోదయ పాఠశాల, విజయవాడ.\n\nవిషయం: అనారోగ్య కారణంగా 5 రోజుల సెలవు మంజూరు చేయగలరు.\n\nమహాశయా,\nవినయంగా విన్నవించుకుంటున్నాను. నాకు జ్వరం వచ్చి 5 రోజులుగా బాధపడుతున్నాను. వైద్యుడు విశ్రాంతి తీసుకోమని సలహా ఇచ్చారు. అందువల్ల పాఠశాలకు రాలేకపోతున్నాను.\n\nతమరు 5 రోజులు సెలవు మంజూరు చేయగలరని వినయంగా కోరుకుంటున్నాను.\n\nమీ విధేయుడైన విద్యార్థి,\nకె. రాహుల్\n10వ తరగతి, బి విభాగం", marks:"5M", years:"Every year" },
+      { topic:"పర్యావరణ పరిరక్షణ వ్యాసం", imp:"★★★", q:"'పర్యావరణ పరిరక్షణ' అనే అంశంపై వ్యాసం రాయండి.", a:"శీర్షిక: పర్యావరణ పరిరక్షణ\n\nముందుమాట: పర్యావరణం అంటే మనచుట్టూ ఉన్న గాలి, నీరు, మట్టి, మొక్కలు, జంతువులు అన్నీ కలిపిన జీవావరణం.\n\nకారణాలు: వాహనాల పొగ, కర్మాగారాల వ్యర్థాలు, అడవుల నరికివేత, ప్లాస్టిక్ వాడకం వల్ల పర్యావరణం కలుషితమవుతోంది.\n\nప్రభావాలు: వాతావరణ మార్పులు, వరదలు, కరువు, వ్యాధులు పెరుగుతున్నాయి.\n\nపరిష్కారాలు: చెట్లు నాటడం, ప్లాస్టిక్ నిషేధం, సౌరశక్తి వాడకం, పర్యావరణ అవగాహన పెంచడం.\n\nముగింపు: పర్యావరణ పరిరక్షణ మన అందరి బాధ్యత. ఈనాడు మనం చేసే పని రేపటి తరానికి ఉపయోగపడుతుంది.", marks:"8M", years:"Every year" },
+      { topic:"స్వాతంత్ర్య దినోత్సవం వ్యాసం", imp:"★★★", q:"'స్వాతంత్ర్య దినోత్సవం' అనే అంశంపై వ్యాసం రాయండి.", a:"శీర్షిక: స్వాతంత్ర్య దినోత్సవం\n\nముందుమాట: ఆగస్టు 15 భారతదేశానికి జాతీయ పర్వదినం. 1947లో ఈ రోజున మనకు స్వాతంత్ర్యం లభించింది.\n\nచారిత్రక నేపథ్యం: వందల సంవత్సరాల బ్రిటిష్ పాలన తర్వాత గాంధీ, నెహ్రూ, పటేల్ వంటి నాయకుల నేతృత్వంలో స్వాతంత్ర్యం వచ్చింది.\n\nవేడుకలు: ఢిల్లీలో ఎర్రకోటపై జాతీయ పతాకం ఎగురవేస్తారు. పాఠశాలల్లో విద్యార్థులు కవాతు చేస్తారు.\n\nముగింపు: స్వాతంత్ర్య సమరయోధుల త్యాగాలను స్మరించుకుంటూ దేశాభివృద్ధికి కృషి చేయాలి.", marks:"8M", years:"2023,2024,2025" },
+      { topic:"సారాంశం రాయడం", imp:"★★★", q:"సారాంశం రాయడానికి నియమాలు ఏమిటి?", a:"1. గద్యాన్ని శ్రద్ధగా చదవాలి\n2. ముఖ్యమైన అంశాలు గుర్తించాలి\n3. మూల పాఠంలో మూడో వంతు మాత్రమే రాయాలి\n4. స్వంత భాషలో రాయాలి\n5. మూల రచయిత పేరు, గద్యం పేరు మొదట రాయాలి\n6. మొదటి పురుష వాచకంలో రాయాలి (నేను కాదు, రచయిత అంటాడు అని రాయాలి)", marks:"4M", years:"Every year" },
+      { topic:"పదాల అర్థాలు - సంధులు గుర్తించడం", imp:"★★★", q:"కింది పదాలలో సంధిని గుర్తించండి: రామాయణం, మహేంద్రుడు, గంగోదకం", a:"రామాయణం = రామ + అయనం → సవర్ణదీర్ఘ సంధి (అ+అ=ఆ)\nమహేంద్రుడు = మహా + ఇంద్రుడు → గుణసంధి (ఆ+ఇ=ఏ)\nగంగోదకం = గంగా + ఉదకం → గుణసంధి (ఆ+ఉ=ఓ)", marks:"3M", years:"Every year" },
+    ],
+    plan5days: [
+      { day:1, focus:"సంధులు + సమాసాలు", target:"సవర్ణదీర్ఘ+గుణ+వృద్ధి సంధులు + తత్పురుష+కర్మధారయ+బహువ్రీహి సమాసాలు నేర్చుకోండి", marks:"~25M" },
+      { day:2, focus:"అలంకారాలు + ఛందస్సు", target:"ఉపమ+రూపక+ఉత్ప్రేక్ష+అనుప్రాస అలంకారాలు + తేటగీతి+ఆటవెలది లక్షణాలు", marks:"~20M" },
+      { day:3, focus:"పద్య భాగం అర్థాలు", target:"పాఠ్యపుస్తకంలోని 6 పద్యాలు — అర్థం + భావం + కవి పేరు", marks:"~24M" },
+      { day:4, focus:"గద్య భాగం + సారాంశం", target:"3 పాఠాల ముఖ్యాంశాలు + సారాంశం రాసే నియమాలు", marks:"~20M" },
+      { day:5, focus:"లేఖలు + వ్యాసాలు", target:"అధికారిక లేఖ format + 3 వ్యాస అంశాలు practice చేయండి", marks:"~25M" },
+    ]
+  },
+  hindi: {
+    mustStudy: [
+      { topic:"संधि", imp:"★★★", q:"दीर्घ संधि का नियम लिखकर उदाहरण दीजिए।", a:"अ/आ के बाद अ/आ आए तो आ हो जाता है। उदा: राम+अयन=रामायण", marks:"2M", years:"Every year" },
+      { topic:"समास", imp:"★★★", q:"तत्पुरुष और बहुव्रीहि समास में अंतर उदाहरण सहित।", a:"तत्पुरुष: उत्तर पद प्रधान। राजपुत्र=राजा का पुत्र। बहुव्रीहि: अन्य पद बोध। नीलकंठ=शिव", marks:"4M", years:"Every year" },
+      { topic:"पत्र लेखन", imp:"★★★", q:"प्रधानाध्यापक को 5 दिन की छुट्टी के लिए पत्र लिखिए।", a:"सेवा में, प्रधानाध्यापक महोदय। विषय: छुट्टी हेतु। महोदय, बुखार के कारण 5 दिन विद्यालय नहीं आ सकता। कृपया छुट्टी दें। आपका आज्ञाकारी छात्र।", marks:"4M", years:"Every year" },
+      { topic:"अलंकार", imp:"★★★", q:"उपमा अलंकार की परिभाषा और उदाहरण दीजिए।", a:"जब किसी की तुलना किसी से की जाए। उदा: हरि पद कोमल कमल से — पाँव की कमल से तुलना।", marks:"4M", years:"Every year" },
+      { topic:"निबंध", imp:"★★★", q:"'पर्यावरण प्रदूषण' पर निबंध लिखिए।", a:"प्रस्तावना→कारण→प्रकार→उपाय→निष्कर्ष format में 200 शब्दों में लिखें।", marks:"8M", years:"Every year" },
+    ],
+    plan5days: [
+      { day:1, focus:"संधि + समास", target:"5 संधि + 5 समास उदाहरण", marks:"~20M" },
+      { day:2, focus:"अलंकार + मुहावरे", target:"5 अलंकार + 10 मुहावरे अर्थ सहित", marks:"~16M" },
+      { day:3, focus:"गद्य पाठ", target:"3 पाठों का सारांश", marks:"~20M" },
+      { day:4, focus:"पद्य पाठ", target:"3 कविताओं का भाव", marks:"~16M" },
+      { day:5, focus:"पत्र + निबंध", target:"2 पत्र + 1 निबंध practice", marks:"~20M" },
+    ]
+  },
+  english: {
+    mustStudy: [
+      { topic:"Passive Voice", imp:"★★★", q:"Change to passive: 'The teacher punishes the students.'", a:"The students are punished by the teacher.", marks:"1M", years:"Every year" },
+      { topic:"Reported Speech", imp:"★★★", q:"Reported speech: He said, 'I am doing my homework now.'", a:"He said that he was doing his homework then.", marks:"2M", years:"Every year" },
+      { topic:"Formal Letter", imp:"★★★", q:"Write a formal letter to Municipal Commissioner about poor roads.", a:"To, The Commissioner. Sub: Poor road condition. Sir, I wish to bring to your notice... I request immediate action. Yours faithfully, [Name]", marks:"4M", years:"Every year" },
+      { topic:"Essay Writing", imp:"★★★", q:"Write an essay on 'Importance of Education' (200 words).", a:"Introduction→Benefits of Education→Role in Society→Conclusion. Always write 4 paragraphs.", marks:"8M", years:"Every year" },
+      { topic:"Reading Comprehension", imp:"★★★", q:"How to attempt reading comprehension questions?", a:"Read passage twice→Find keywords in question→Locate in passage→Answer in own words→Keep answers short", marks:"4M", years:"Every year" },
+      { topic:"Tenses", imp:"★★★", q:"Write sentences in: Simple Past, Past Perfect, Past Continuous.", a:"Simple Past: She wrote a letter. Past Perfect: She had written. Past Continuous: She was writing.", marks:"2M", years:"Every year" },
+    ],
+    plan5days: [
+      { day:1, focus:"Grammar — Tenses + Voice", target:"All tenses table + 10 passive voice", marks:"~20M" },
+      { day:2, focus:"Reported Speech + Comprehension", target:"10 reported speech + comprehension tips", marks:"~16M" },
+      { day:3, focus:"Prose Lessons", target:"3 lesson summaries + key questions", marks:"~20M" },
+      { day:4, focus:"Poetry + Vocabulary", target:"3 poem meanings + 20 synonyms/antonyms", marks:"~16M" },
+      { day:5, focus:"Letter Writing + Essay", target:"2 formal letters + 1 essay practice", marks:"~20M" },
+    ]
+  },
+};
 
-                    {tab === 'base' && (
-                        <div className="pad">
-                            <div className="box">🏗️ <b>Base Mode:</b> Most repeated questions for 2026.</div>
-                            {SUBJECTS.map(s => (
-                                <div key={s.id} className="card" onClick={() => {setSelectedSub(s); setView('subject');}}>
-                                    <span className="badge">PASS GUARANTEED</span>
-                                    <div style={{marginTop: '8px', fontWeight: '700'}}>{s.icon} {s.name} Base</div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+// ── EDGE CONTENT ────────────────────────────────────────────────────────
 
-                    {tab === 'exam' && (
-                        <div className="pad">
-                            <div className="box">📝 <b>Exam Simulator:</b> Practice with Board-standard papers.</div>
-                            {SUBJECTS.map(s => (
-                                <button key={s.id} className="btn btn-orange" style={{marginBottom: '10px'}} onClick={() => {setSelectedSub(s); setView('exam');}}>
-                                    {s.name} Exam Paper
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                    <footer>© 2026 DIGI ROUTE. ALL RIGHTS RESERVED.</footer>
+// ── EXAM POOLS ───────────────────────────────────────────────────────────
+const EXAM_POOLS = {
+  maths:[
+    { s:"SECTION A",m:1,q:"Find HCF of 48 and 18 using Euclid's algorithm." },
+    { s:"SECTION A",m:1,q:"nth term of AP 3,7,11,15... Find a₈." },
+    { s:"SECTION B",m:2,q:"Find roots of x²+5x+6=0 by factorisation." },
+    { s:"SECTION B",m:2,q:"Find distance between A(1,2) and B(4,6)." },
+    { s:"SECTION C",m:4,q:"Solve: 3x+2y=8 and 5x-3y=7 by elimination method." },
+    { s:"SECTION D",m:8,q:"Prove that √3 is irrational. Also prove that 2+√3 is irrational." },
+  ],
+  physics:[
+    { s:"SECTION A",m:1,q:"State Ohm's Law." },
+    { s:"SECTION A",m:1,q:"What is the unit of power of a lens?" },
+    { s:"SECTION B",m:2,q:"Difference between conductor and insulator with examples." },
+    { s:"SECTION B",m:2,q:"What is pH scale? What does pH=7 indicate?" },
+    { s:"SECTION C",m:4,q:"Explain electromagnetic induction with Faraday's Laws." },
+    { s:"SECTION D",m:8,q:"Explain the defects of human eye — Myopia and Hypermetropia with diagrams and corrections." },
+  ],
+  biology:[
+    { s:"SECTION A",m:1,q:"Name the hormone that regulates blood sugar." },
+    { s:"SECTION A",m:1,q:"What is the basic unit of the nervous system?" },
+    { s:"SECTION B",m:2,q:"Difference between aerobic and anaerobic respiration." },
+    { s:"SECTION B",m:2,q:"Name 4 types of asexual reproduction with examples." },
+    { s:"SECTION C",m:4,q:"Explain double circulation in humans with diagram." },
+    { s:"SECTION D",m:8,q:"Explain Mendel's Law of Segregation with monohybrid cross and Punnett square." },
+  ],
+  social:[
+    { s:"SECTION A",m:1,q:"When was Telangana state formed?" },
+    { s:"SECTION A",m:1,q:"Who was chairman of the Drafting Committee of Indian Constitution?" },
+    { s:"SECTION B",m:2,q:"Difference between Kharif and Rabi crops — 2 examples each." },
+    { s:"SECTION B",m:2,q:"State any 4 Fundamental Rights." },
+    { s:"SECTION C",m:4,q:"Explain the causes of Non-Cooperation Movement (1920)." },
+    { s:"SECTION D",m:8,q:"Explain the role of Mahatma Gandhi in Indian National Movement — 3 key events." },
+  ],
+  telugu:[
+    { s:"విభాగం A",m:1,q:"సవర్ణదీర్ఘ సంధి నియమం రాయండి." },
+    { s:"విభాగం A",m:1,q:"కర్మధారయ సమాసం నిర్వచనం రాయండి." },
+    { s:"విభాగం B",m:2,q:"ఉపమాలంకారం నిర్వచనం మరియు ఉదాహరణ రాయండి." },
+    { s:"విభాగం B",m:2,q:"తేటగీతి లక్షణాలు రాయండి." },
+    { s:"విభాగం C",m:4,q:"పాఠశాల ప్రధానోపాధ్యాయుడికి 5 రోజుల సెలవు కోసం లేఖ రాయండి." },
+    { s:"విభాగం D",m:8,q:"'పర్యావరణ పరిరక్షణ' అనే అంశంపై వ్యాసం రాయండి." },
+  ],
+  hindi:[
+    { s:"खंड A",m:1,q:"दीर्घ संधि का एक उदाहरण दीजिए।" },
+    { s:"खंड A",m:1,q:"तत्पुरुष समास का एक उदाहरण दीजिए।" },
+    { s:"खंड B",m:2,q:"उपमा अलंकार की परिभाषा और उदाहरण दीजिए।" },
+    { s:"खंड B",m:2,q:"'आँखें खुलना' मुहावरे का अर्थ और वाक्य प्रयोग।" },
+    { s:"खंड C",m:4,q:"प्रधानाध्यापक को 5 दिन की छुट्टी हेतु पत्र लिखिए।" },
+    { s:"खंड D",m:8,q:"'पर्यावरण प्रदूषण' विषय पर निबंध लिखिए।" },
+  ],
+  english:[
+    { s:"SECTION A",m:1,q:"Change to passive: 'She writes a letter.'" },
+    { s:"SECTION A",m:1,q:"Reported speech: He said, 'I am going to school.'" },
+    { s:"SECTION B",m:2,q:"Write 3 sentences in Past Perfect tense." },
+    { s:"SECTION B",m:2,q:"Synonym of: enormous, ancient, courageous." },
+    { s:"SECTION C",m:4,q:"Write a formal letter to the Municipal Commissioner about poor drainage in your area." },
+    { s:"SECTION D",m:8,q:"Write an essay on 'The Importance of Education' in about 200 words." },
+  ],
+};
+const EXAM_STRATEGY = {
+  maths: [
+    {
+      topic:"Real Numbers",
+      approach:"Think of this as a simple division game. Keep dividing until remainder is zero. That's it! Don't overthink it.",
+      keyPoints:[
+        "HCF = biggest number that divides both numbers exactly",
+        "Always divide bigger number by smaller number first",
+        "Each step: use previous step's remainder as the new divisor",
+        "When remainder = 0, stop. Last divisor = HCF",
+        "For irrational proofs: ASSUME it is rational first, then show contradiction"
+      ],
+      howToAnswer:"Example: Find HCF of 96 and 404\n\n404 = 96 × 4 + 20\n96 = 20 × 4 + 16\n20 = 16 × 1 + 4\n16 = 4 × 4 + 0\n\n∴ HCF = 4\n\nEach line = one mark. Never skip any step.",
+      examinerTip:"Even if your final answer is wrong, you still get marks for each correct step you wrote. Always write every step!",
+      commonMistake:"Stopping too early. Write every division until remainder is exactly zero.",
+      marks:"4M = 4 division steps shown. 8M = proof + 2 examples"
+    },
+    {
+      topic:"Polynomials",
+      approach:"Finding zeros is only half the job. Verification is the other half — it has equal marks! Never skip verification.",
+      keyPoints:[
+        "Zero of polynomial = value that makes the polynomial = 0",
+        "Sum of zeros = -b/a",
+        "Product of zeros = c/a",
+        "Factorize by splitting middle term to find zeros",
+        "Always verify both sum AND product after finding zeros"
+      ],
+      howToAnswer:"Find zeros of x² + 7x + 10 and verify:\n\nSplit: x² + 5x + 2x + 10\nFactorize: (x+2)(x+5) = 0\nZeros: x = -2 and x = -5\n\nVerification:\nSum = -2+(-5) = -7 = -(7)/1 = -b/a ✓\nProduct = (-2)×(-5) = 10 = 10/1 = c/a ✓",
+      examinerTip:"Verification is free marks! Even if zeros are slightly wrong, correct verification setup still gets you marks. Never skip it.",
+      commonMistake:"Students find zeros correctly but skip verification. That is 2 marks thrown away for nothing.",
+      marks:"4M: zeros(2M) + verification(2M). Both parts equal!"
+    },
+    {
+      topic:"Quadratic Equations",
+      approach:"Three methods exist. Examiner will say which one to use. Use ONLY that method — using different method loses marks even if answer is correct!",
+      keyPoints:[
+        "D = b²-4ac tells nature of roots before you solve",
+        "D > 0 = two different real roots",
+        "D = 0 = two equal roots",
+        "D < 0 = no real roots",
+        "Quadratic formula: x = (-b ± √D) / 2a — memorize this"
+      ],
+      howToAnswer:"Solve 2x² - 5x + 3 = 0 using formula:\n\nIdentify: a=2, b=-5, c=3\nCalculate D: D = 25 - 24 = 1\nFormula: x = (5 ± √1) / 4\nx₁ = (5+1)/4 = 3/2\nx₂ = (5-1)/4 = 1\n\n∴ Roots are 3/2 and 1",
+      examinerTip:"Always write a=, b=, c= separately before formula. You get marks for identifying them correctly even if calculation goes wrong after.",
+      commonMistake:"Forgetting ± and calculating only one root. Always find both x₁ and x₂.",
+      marks:"2M: factorisation. 4M: formula with D shown. 8M: word problem + solve + verify"
+    },
+    {
+      topic:"Progressions (AP)",
+      approach:"Write a and d clearly at the start of every answer. Examiner sees this and knows you understand the basics — that alone gets you 1 mark.",
+      keyPoints:[
+        "a = first term, d = common difference (second term minus first term)",
+        "nth term: aₙ = a + (n-1)d",
+        "Sum of n terms: Sₙ = n/2 × [2a + (n-1)d]",
+        "If last term given: Sₙ = n/2 × (first + last) — shorter!",
+        "Always find d FIRST before doing anything else"
+      ],
+      howToAnswer:"Find 20th term of AP: 3, 7, 11, 15...\n\na = 3, d = 7-3 = 4\nFormula: aₙ = a + (n-1)d\na₂₀ = 3 + (20-1) × 4\na₂₀ = 3 + 76 = 79",
+      examinerTip:"Writing a=3 and d=4 at start shows examiner you understand. Even if calculation goes wrong, you get 1 mark for identifying a and d.",
+      commonMistake:"Using sum formula when question asks for nth term. Read carefully — 'find 10th term' is different from 'find sum of 10 terms'.",
+      marks:"1M: find one term. 2M: term + sum. 4M: full problem with application"
+    },
+    {
+      topic:"Trigonometry",
+      approach:"Identity proofs look scary but follow same pattern always. Start from LEFT side only. Convert everything to sin and cos if stuck — you will always reach RHS.",
+      keyPoints:[
+        "sin²θ + cos²θ = 1 is the master identity — all others come from this",
+        "Divide by cos²θ → tan²θ + 1 = sec²θ",
+        "Divide by sin²θ → 1 + cot²θ = cosec²θ",
+        "Standard values: sin30=½, sin45=1/√2, sin60=√3/2, sin90=1",
+        "NEVER work on both sides — only work on LHS"
+      ],
+      howToAnswer:"Prove: (1+tanθ)² + (1+cotθ)² = (secθ+cosecθ)²\n\nLHS = expand step by step\nConvert to sin/cos if needed\nSimplify each step on new line\nReach RHS expression\nWrite: ∴ LHS = RHS (Proved) ✓",
+      examinerTip:"If stuck in middle of proof — convert everything to sin and cos. This trick works 90% of the time.",
+      commonMistake:"Working on both sides simultaneously. Only work on LHS. Examiner cuts marks for working on both sides.",
+      marks:"2M: simple identity. 4M: longer proof. Every correct step = marks"
+    },
+    {
+      topic:"Applications of Trigonometry",
+      approach:"Draw diagram FIRST. Every single time. Without diagram you cannot solve. With diagram, solution becomes obvious. Diagram alone = 2 marks.",
+      keyPoints:[
+        "Angle of elevation = looking UP at something above you",
+        "Angle of depression = looking DOWN at something below you",
+        "Most problems: tan(angle) = height ÷ horizontal distance",
+        "Draw right angle triangle with angle, height, distance all labeled",
+        "For two-tower problems: draw both with a connecting horizontal line"
+      ],
+      howToAnswer:"Tower problem: 30m away, elevation angle 60°. Find height:\n\nDraw triangle: base=30m, angle=60°, height=h (unknown)\nWrite: tan60° = h/30\n√3 = h/30\nh = 30√3 = 51.96m",
+      examinerTip:"Diagram is worth 2 marks in a 4M question. Even if calculation is incomplete, correct labeled diagram gives you half the marks.",
+      commonMistake:"Starting calculation without drawing diagram. Examiner wants to see your triangle always.",
+      marks:"4M: diagram(2M) + calculation(2M). 8M: two angles, two triangles"
+    },
+    {
+      topic:"Statistics",
+      approach:"Make a neat table first. Fill every column. Then apply formula. This approach never fails in Statistics.",
+      keyPoints:[
+        "Mean (direct): Σfx ÷ Σf",
+        "Median formula: L + [(N/2 - cf)/f] × h",
+        "Mode formula: L + [(f₁-f₀)/(2f₁-f₀-f₂)] × h",
+        "Median class = where cumulative frequency first reaches N/2",
+        "Modal class = class with highest frequency"
+      ],
+      howToAnswer:"Always make table first:\nClass | Frequency(f) | Midvalue(x) | fx\n\nFind Σf = total. Find Σfx.\nMean = Σfx ÷ Σf\n\nFor median: add cumulative frequency column.\nFind N/2. Find which class contains it.\nApply median formula.",
+      examinerTip:"A neat complete table with proper headings = 2 marks before you apply any formula. Examiner is impressed by organized work.",
+      commonMistake:"Using class boundaries instead of midvalues for mean, or not identifying median class correctly before applying formula.",
+      marks:"4M: one measure with table. 8M: ogive drawing + median from graph"
+    },
+    {
+      topic:"Probability",
+      approach:"Count total outcomes first. Then count favorable outcomes. Never guess — always count carefully. Answer is always a fraction between 0 and 1.",
+      keyPoints:[
+        "P(event) = favorable outcomes ÷ total outcomes",
+        "P(E) + P(not E) = 1 — use this shortcut for 'not happening'",
+        "Cards: total=52, each suit=13, kings=4, red cards=26",
+        "One die: total=6. Two dice: total=36",
+        "Always simplify fraction to lowest terms"
+      ],
+      howToAnswer:"P(king) from 52 cards:\n\nTotal cards = 52\nNumber of kings = 4\nP(king) = 4/52 = 1/13\n\nAlways write total first, then favorable, then fraction, then simplify.",
+      examinerTip:"Always write 'Total outcomes = 52' before writing P. Even for 1M, this shows examiner you are thinking correctly.",
+      commonMistake:"Not simplifying fraction. 4/52 must be written as 1/13. Unsimplified fractions lose marks.",
+      marks:"1M: one probability. 2M: working shown. 4M: multiple events with working"
+    },
+  ],
+  physics: [
+    {
+      topic:"Mirrors and Reflection",
+      approach:"Mirror problems are two parts: drawing and calculating. Draw first always. Good diagram makes calculation obvious.",
+      keyPoints:[
+        "Mirror formula: 1/v + 1/u = 1/f",
+        "Objects placed on left — so u is always negative",
+        "Concave mirror: f is negative. Convex mirror: f is positive",
+        "Magnification m = -v/u. Negative m = real and inverted image",
+        "State sign convention before writing values"
+      ],
+      howToAnswer:"Object at 20cm from concave mirror, f=10cm:\n\nSign convention: left side is negative\nu = -20cm, f = -10cm\n1/v = 1/f - 1/u = 1/(-10) - 1/(-20)\n1/v = -1/20\nv = -20cm\n\nImage is real (negative v), same distance as object.",
+      examinerTip:"Write 'Using sign convention' before writing u and f values. Examiner gives 1 mark for correct sign convention alone.",
+      commonMistake:"Forgetting negative signs. In concave mirror both u and f are negative. Wrong signs = completely wrong answer.",
+      marks:"4M: ray diagram(2M) + formula + calculation(2M)"
+    },
+    {
+      topic:"Electric Current and Ohm's Law",
+      approach:"Electricity numericals follow one pattern: find equivalent resistance first, then use V=IR. Draw circuit diagram for every numerical.",
+      keyPoints:[
+        "Ohm's Law: V = IR",
+        "Series: R = R₁ + R₂ + R₃ (just add)",
+        "Parallel: 1/R = 1/R₁ + 1/R₂ + 1/R₃ (reciprocal!)",
+        "Series: same current everywhere. Parallel: same voltage everywhere",
+        "Power: P = VI = I²R = V²/R"
+      ],
+      howToAnswer:"3Ω, 5Ω, 7Ω in series, battery 15V:\n\nDraw circuit diagram\nEquivalent R = 3+5+7 = 15Ω\nCurrent I = V/R = 15/15 = 1A\nVoltage across 3Ω = 1×3 = 3V",
+      examinerTip:"Draw circuit diagram for any electricity problem — even simple ones. Just the diagram gets 1-2 marks before any calculation.",
+      commonMistake:"Adding parallel resistances directly instead of using reciprocal formula. In parallel you CANNOT add directly!",
+      marks:"2M: law + apply. 4M: diagram + calculation. 8M: series vs parallel comparison"
+    },
+    {
+      topic:"Chemical Reactions",
+      approach:"Balance equation first, then identify type. Both are important. Unbalanced equation = lose marks even if type is correct.",
+      keyPoints:[
+        "Never change subscripts — only change coefficients to balance",
+        "Balance metals first, then non-metals, hydrogen second-last, oxygen last",
+        "5 types: Combination, Decomposition, Displacement, Double displacement, Redox",
+        "Displacement: more reactive metal pushes out less reactive metal",
+        "Oxidation = loss of electrons. Reduction = gain of electrons"
+      ],
+      howToAnswer:"Balance: Fe + O₂ → Fe₂O₃\n\nBalance Fe: 4Fe + O₂ → 2Fe₂O₃\nBalance O: 4Fe + 3O₂ → 2Fe₂O₃\nVerify: Left 4Fe,6O = Right 4Fe,6O ✓\nType: Combination reaction",
+      examinerTip:"After balancing, verify by counting atoms on both sides and write the verification. Shows thoroughness and gets full marks.",
+      commonMistake:"Changing subscripts instead of coefficients. Changing subscripts changes the compound itself — never do this!",
+      marks:"2M: balanced equation. 4M: balanced + type + observation"
+    },
+    {
+      topic:"Human Eye and Defects",
+      approach:"Myopia and Hypermetropia are asked every year. Learn both with diagrams. Two diagrams needed: defective eye AND corrected eye.",
+      keyPoints:[
+        "Myopia = near-sighted. Cannot see far. Image forms BEFORE retina",
+        "Hypermetropia = far-sighted. Cannot see near. Image forms BEHIND retina",
+        "Myopia correction: concave (diverging) lens",
+        "Hypermetropia correction: convex (converging) lens",
+        "Two diagrams for full marks: defective + corrected"
+      ],
+      howToAnswer:"Myopia answer:\n\n1. Define: Cannot see distant objects clearly\n2. Cause: Eyeball too long OR lens too thick\n3. Effect: Image forms in front of retina\n4. Draw diagram 1: parallel rays converging before retina\n5. Correction: Concave lens used\n6. Draw diagram 2: concave lens making rays focus ON retina",
+      examinerTip:"Two diagrams = 4 marks. One diagram only = 2 marks. Always draw BOTH — defective and corrected.",
+      commonMistake:"Mixing up correction lenses. Remember: Myopia→Concave. Hypermetropia→Convex.",
+      marks:"8M: definition(1M) + cause(1M) + 2 diagrams(4M) + correction(2M)"
+    },
+    {
+      topic:"Periodic Table",
+      approach:"Trend questions need two things: state the trend AND explain WHY. Just stating trend = half marks. Reason = full marks.",
+      keyPoints:[
+        "Atomic radius: increases DOWN a group, decreases ACROSS a period",
+        "Ionisation energy: opposite to atomic radius",
+        "Modern Periodic Law: properties depend on atomic NUMBER not mass",
+        "More protons = stronger pull on electrons = smaller radius",
+        "More shells = electrons farther from nucleus = bigger radius"
+      ],
+      howToAnswer:"Explain atomic radius trend across a period:\n\nState: Atomic radius decreases left to right across a period\nReason: Atomic number increases → more protons → stronger nuclear attraction\nEffect: Electrons pulled closer to nucleus → radius decreases\nExample: Na > Mg > Al > Si (decreasing order)",
+      examinerTip:"Writing 'because' and giving the REASON doubles your marks compared to just stating the trend. Examiners love explanation.",
+      commonMistake:"Confusing group vs period trends. In GROUP radius increases going down. In PERIOD radius decreases going right. Opposite directions!",
+      marks:"2M: state law + one trend. 4M: three trends with reasons. 8M: all trends + examples"
+    },
+  ],
+  biology: [
+    {
+      topic:"Photosynthesis",
+      approach:"Write the balanced equation first — always. Then explain where each part happens. Chloroplast diagram is worth 2 marks on its own.",
+      keyPoints:[
+        "Equation: 6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂ (sunlight, chlorophyll)",
+        "Write conditions: sunlight above arrow, chlorophyll below arrow",
+        "Light reaction: in thylakoid membrane. Splits water, produces ATP",
+        "Dark reaction: in stroma. Uses CO₂ to make glucose",
+        "Leaves look green because chlorophyll reflects green light"
+      ],
+      howToAnswer:"Write equation first with conditions.\n\nThen explain:\n• Sunlight absorbed by chlorophyll\n• Water splits in thylakoid — O₂ released (what we breathe!)\n• CO₂ from air enters through stomata\n• Glucose made in stroma (Calvin cycle)\n• Glucose stored as starch\n\nDraw chloroplast with thylakoid and stroma labeled.",
+      examinerTip:"Chloroplast diagram with thylakoid and stroma labeled = 2 marks. Even a simple oval shape with labels inside is enough.",
+      commonMistake:"Writing CO₂+H₂O without the number 6 in front. The balanced equation needs 6CO₂ + 6H₂O. Missing 6 = equation is wrong.",
+      marks:"2M: equation only. 4M: equation + conditions + diagram. 8M: complete light + dark reaction"
+    },
+    {
+      topic:"Respiration",
+      approach:"Aerobic vs Anaerobic comparison is asked almost every year. Learn both in table format. Table answers look organized and always cover all points.",
+      keyPoints:[
+        "Aerobic: needs O₂, produces 38 ATP, products are CO₂ + H₂O",
+        "Anaerobic: no O₂, produces only 2 ATP",
+        "Anaerobic in yeast: ethanol + CO₂ (fermentation)",
+        "Anaerobic in muscle cells: lactic acid (causes cramps)",
+        "Glycolysis happens in cytoplasm — common for both types"
+      ],
+      howToAnswer:"Draw comparison table:\n\nPoint | Aerobic | Anaerobic\nO₂ needed | Yes | No\nSite | Cytoplasm+Mitochondria | Cytoplasm only\nProducts | CO₂ + H₂O | Ethanol+CO₂ or Lactic acid\nATP produced | 38 ATP | 2 ATP\nExample | Humans, animals | Yeast, muscle cells",
+      examinerTip:"Mentioning ATP count (38 vs 2) immediately shows deep knowledge. This one fact often gets you from 3 marks to 4 marks.",
+      commonMistake:"Writing same product for both types of anaerobic. Yeast makes ethanol. Muscle cells make lactic acid. Different products — both can be asked!",
+      marks:"2M: one difference. 4M: table with 4-5 points. 8M: full mechanism with diagram"
+    },
+    {
+      topic:"Heart and Blood Circulation",
+      approach:"Draw heart diagram first ALWAYS. Once you draw it with four chambers and arrows, the explanation writes itself. Practice this diagram before exam.",
+      keyPoints:[
+        "4 chambers: Right Atrium, Right Ventricle, Left Atrium, Left Ventricle",
+        "Right side: deoxygenated blood (from body, going to lungs)",
+        "Left side: oxygenated blood (from lungs, going to body)",
+        "Pulmonary: Right heart → Lungs → Left heart",
+        "Systemic: Left heart → Body → Right heart"
+      ],
+      howToAnswer:"Draw heart with 4 chambers labeled. Add arrows showing blood flow.\n\nExplain:\n• Deoxygenated blood enters Right Atrium from body\n• Pumped to lungs via pulmonary artery\n• Lungs add O₂, remove CO₂\n• Oxygenated blood enters Left Atrium\n• Pumped to whole body via aorta\n\nExplain why it is 'double' — blood passes through heart TWICE per cycle.",
+      examinerTip:"Arrows showing blood flow direction = 2 marks. Without arrows diagram is incomplete. Use dotted lines for deoxygenated, solid for oxygenated.",
+      commonMistake:"Saying oxygenated blood is on RIGHT side. No — LEFT side has oxygenated blood. Right side has deoxygenated. Many students get this backwards!",
+      marks:"8M: diagram with arrows(4M) + pulmonary(2M) + systemic(2M)"
+    },
+    {
+      topic:"Excretion and Nephron",
+      approach:"Nephron is asked in every exam. Learn diagram + three steps. These two things alone can get you full marks in any excretion question.",
+      keyPoints:[
+        "Nephron = functional unit of kidney",
+        "3 steps of urine formation: Filtration → Reabsorption → Secretion",
+        "Filtration: waste filtered from blood in Bowman's capsule",
+        "Reabsorption: useful things (glucose, water) taken back into blood",
+        "Secretion: extra waste added from blood into tube"
+      ],
+      howToAnswer:"Label nephron diagram: Glomerulus, Bowman's capsule, PCT, Loop of Henle, DCT, Collecting duct\n\nExplain 3 steps:\nStep 1 - Filtration: Blood under high pressure enters glomerulus. Small molecules (water, salts, urea) filter into Bowman's capsule.\nStep 2 - Reabsorption: Glucose, amino acids, needed water reabsorbed back into capillaries.\nStep 3 - Secretion: Extra waste from blood added to filtrate in tubule.\nFinal urine collects in collecting duct.",
+      examinerTip:"Label at least 5 parts of nephron. Each correctly labeled part = marks secured. Unlabeled diagram gets only 1 out of possible 4 marks.",
+      commonMistake:"Writing only 'filtration' and missing reabsorption and secretion. All 3 steps needed for full marks.",
+      marks:"4M: diagram(2M) + 3 steps(2M). 8M: complete explanation + dialysis"
+    },
+    {
+      topic:"Heredity and Mendel's Laws",
+      approach:"Punnett square is your best friend here. Draw it for every cross. Even if explanation is incomplete, correct Punnett square alone gets you good marks.",
+      keyPoints:[
+        "Dominant = capital letter (T for tall). Recessive = small letter (t for dwarf)",
+        "Homozygous = both same (TT or tt). Heterozygous = different (Tt)",
+        "F1 = first generation. F2 = F1 × F1",
+        "F2 phenotypic ratio: 3 dominant : 1 recessive",
+        "F2 genotypic ratio: 1:2:1"
+      ],
+      howToAnswer:"Monohybrid cross — Tall(TT) × Dwarf(tt):\n\nState Law of Segregation first\nParents: TT × tt\nGametes: T and t\n\nDraw Punnett square:\n    T    T\nt [ Tt ][ Tt ]\nt [ Tt ][ Tt ]\n\nF1: All Tt (all tall)\n\nF2 cross Tt × Tt:\nResult: TT, Tt, Tt, tt\nPhenotype ratio: 3 Tall : 1 Dwarf",
+      examinerTip:"Always write the ratio at end — '3 Tall : 1 Dwarf'. Just the ratio alone = 1 dedicated mark. Never miss writing it.",
+      commonMistake:"Drawing Punnett square without showing parent genotypes and gametes outside the square. Always label parents and gametes clearly.",
+      marks:"8M: law(1M) + parents(1M) + F1 Punnett(2M) + F2 Punnett(3M) + ratio(1M)"
+    },
+  ],
+  social: [
+    {
+      topic:"Nationalism in India",
+      approach:"Three movements, each with causes, events, Gandhi's role, and result. Learn this pattern and you can answer any nationalism question.",
+      keyPoints:[
+        "Non-Cooperation 1920: Rowlatt Act + Jallianwala Bagh (April 13, 1919) were causes",
+        "Civil Disobedience 1930: Gandhi walked to Dandi, made salt, broke British law",
+        "Quit India 1942: 'Do or Die' slogan. British must leave immediately",
+        "Gandhi's method: non-violence + civil disobedience always",
+        "Independence: August 15, 1947"
+      ],
+      howToAnswer:"Structure for any movement:\n\nPara 1: Background before movement\nPara 2: Causes — specific events with dates\nPara 3: Main events — what happened, key dates, places\nPara 4: Gandhi's specific role\nPara 5: Result and what was achieved\n\nUse specific dates. '1920' is better than 'early 1900s'.",
+      examinerTip:"Specific dates and facts impress examiners. 'April 13, 1919 Jallianwala Bagh' is much better than 'the massacre'. Each specific fact shows you have studied well.",
+      commonMistake:"Mixing up events of different movements. Remember: Non-Cooperation 1920, Civil Disobedience 1930, Quit India 1942. Each 10 years apart.",
+      marks:"4M: one movement fully. 8M: two movements with comparison"
+    },
+    {
+      topic:"Telangana Formation",
+      approach:"Every Telangana student must know this perfectly. Know key dates, key people, key reasons. Show pride in your state's history.",
+      keyPoints:[
+        "1956: Telangana merged with Andhra Pradesh — States Reorganisation Act",
+        "Reasons for demand: underdevelopment, water disputes, fewer jobs for locals",
+        "2001: TRS party formed by K.Chandrashekar Rao",
+        "June 2, 2014: Telangana became 29th state of India",
+        "K.Chandrashekar Rao = first Chief Minister"
+      ],
+      howToAnswer:"Start with background:\nTelangana merged with AP in 1956. People felt neglected.\n\nReasons for separation:\nLess development, water from Krishna/Godavari not shared fairly, fewer government jobs for Telangana people.\n\nMovement:\nAgitations from 1969. TRS formed 2001. Years of struggle.\n\nFormation:\nJune 2, 2014 — Telangana became India's 29th state. KCR became first CM.",
+      examinerTip:"Writing 'June 2, 2014' and 'KCR as first CM' shows complete knowledge. Vague answers like 'in 2014 it became a state' get fewer marks.",
+      commonMistake:"Not explaining WHY Telangana wanted separate state. Just saying 'people wanted it' is not enough. Always explain water disputes and employment reasons.",
+      marks:"2M: date + first CM. 4M: reasons + formation. 8M: complete history 1956-2014"
+    },
+    {
+      topic:"Indian Constitution",
+      approach:"Very predictable questions. Know all 6 Fundamental Rights with article numbers. Format: Name → Article → Meaning → Example for each right.",
+      keyPoints:[
+        "Adopted: Nov 26, 1949. Enforced: Jan 26, 1950 (Republic Day)",
+        "B.R. Ambedkar = Chairman of Drafting Committee",
+        "6 Fundamental Rights: Equality, Freedom, Against Exploitation, Religion, Culture/Education, Constitutional Remedies",
+        "Article 32 = Right to Constitutional Remedies = 'Heart and Soul' said Ambedkar",
+        "DPSP = guidelines for government, not enforceable in court"
+      ],
+      howToAnswer:"For 4 Fundamental Rights:\n\n1. Right to Equality (Art.14-18): All equal before law. No discrimination on caste, religion, sex.\n\n2. Right to Freedom (Art.19-22): Freedom of speech, movement, profession.\n\n3. Right Against Exploitation (Art.23-24): No forced labor, no child labor.\n\n4. Right to Constitutional Remedies (Art.32): Can go to Supreme Court if rights violated.",
+      examinerTip:"Mentioning Article numbers like 'Article 14 guarantees equality' impresses examiner. You don't need all — knowing even a few shows deep knowledge.",
+      commonMistake:"Listing rights without explaining them. '1.Right to Equality 2.Right to Freedom' with no explanation gets almost no marks.",
+      marks:"4M: 4 rights with explanation. 8M: all 6 rights + how Constitution was made"
+    },
+    {
+      topic:"Agriculture in India",
+      approach:"Table format works best for Kharif vs Rabi comparison. If you draw this table correctly you get full marks easily.",
+      keyPoints:[
+        "Kharif: June-July sowing, October harvest. Rice, Cotton, Maize, Groundnut",
+        "Rabi: October-November sowing, March-April harvest. Wheat, Barley, Mustard",
+        "Zaid: March-June. Watermelon, Cucumber, Pumpkin",
+        "Green Revolution: 1960s. HYV seeds + fertilizers + irrigation",
+        "Green Revolution success in Punjab, Haryana — 'wheat bowl of India'"
+      ],
+      howToAnswer:"Comparison table:\nFeature | Kharif | Rabi\nSowing | June-July | Oct-Nov\nHarvest | October | March-April\nWater | High (monsoon) | Less (winter dew)\nCrops | Rice, Cotton | Wheat, Mustard\n\nGreen Revolution:\n• When: 1960s-70s\n• What: HYV seeds + fertilizers + irrigation\n• Result: Food production doubled, India became self-sufficient\n• Problems: Soil degradation, only rich farmers benefited",
+      examinerTip:"Mentioning both POSITIVE and NEGATIVE impacts of Green Revolution shows balanced thinking. Most students write only positive — you will stand out by including problems too.",
+      commonMistake:"Confusing Kharif and Rabi seasons. Remember: Kharif = rainy season crops. Rabi = winter crops.",
+      marks:"2M: name crops. 4M: comparison table. 8M: table + Green Revolution + food security"
+    },
+  ],
+  telugu: [
+    {
+      topic:"సంధులు — నియమాలు & ఉదాహరణలు",
+      approach:"సంధి అంటే రెండు పదాలు కలిసేటప్పుడు జరిగే మార్పు. ముందు నియమం అర్థం చేసుకోండి — ఉదాహరణ దానంతట అదే వస్తుంది. Format తప్పనిసరిగా పాటించాలి.",
+      keyPoints:[
+        "సవర్ణదీర్ఘ సంధి: అ/ఆ తర్వాత అ/ఆ వస్తే దీర్ఘం — రామ+అయనం = రామాయణం",
+        "గుణసంధి: అ/ఆ తర్వాత ఇ/ఈ వస్తే ఏ — మహా+ఇంద్రుడు = మహేంద్రుడు",
+        "గుణసంధి: అ/ఆ తర్వాత ఉ/ఊ వస్తే ఓ — గంగా+ఉదకం = గంగోదకం",
+        "వృద్ధి సంధి: అ/ఆ తర్వాత ఎ/ఏ వస్తే ఐ — ఏక+ఏకం = ఏకైకం",
+        "విగ్రహవాక్యం = సంధి పదాన్ని విడగొట్టి అర్థం చెప్పడం — తప్పనిసరి రాయాలి"
+      ],
+      howToAnswer:"ప్రతి సంధి question కి ఈ exact format వాడండి:\n\nసంధి పేరు: సవర్ణదీర్ఘ సంధి\nనియమం: అ లేదా ఆ తర్వాత అ లేదా ఆ వస్తే రెండూ కలిసి దీర్ఘం అవుతుంది\nఉదాహరణ 1: రామ + అయనం = రామాయణం (అ+అ=ఆ)\nవిగ్రహవాక్యం: రామాయణం = రాముని అయనం\n\nఉదాహరణ 2: విద్యా + అభ్యాసం = విద్యాభ్యాసం (ఆ+అ=ఆ)\n\nఉదాహరణలో + గుర్తు, విగ్రహవాక్యంలో = గుర్తు వాడండి.",
+      examinerTip:"నియమం రాస్తే 1M, ఉదాహరణ రాస్తే 0.5M, విగ్రహవాక్యం రాస్తే 0.5M. మూడూ రాస్తేనే full 2M వస్తాయి! ఒక్కటి వదిలినా marks పోతాయి.",
+      commonMistake:"నియమం వదిలి ఉదాహరణ మాత్రమే రాయడం. లేదా విగ్రహవాక్యం మర్చిపోవడం. రెండూ marks తగ్గిస్తాయి.",
+      marks:"1M: పేరు+ఉదాహరణ. 2M: నియమం+ఉదాహరణలు+విగ్రహవాక్యం. 4M: 3 సంధులు పూర్తిగా"
+    },
+    {
+      topic:"సమాసాలు — రకాలు & విగ్రహవాక్యాలు",
+      approach:"సమాసం అంటే రెండు పదాలు కలిసి ఒక కొత్త పదంగా మారడం. ఏ పదం ప్రధానం అనే దాన్ని బట్టి సమాసం పేరు వస్తుంది. విగ్రహవాక్యం రాయడమే ముఖ్యం.",
+      keyPoints:[
+        "తత్పురుష: ఉత్తరపదం ప్రధానం → రాజపుత్రుడు = రాజు యొక్క పుత్రుడు",
+        "కర్మధారయ: విశేషణ+విశేష్యం → నీలోత్పలం = నీలమైన ఉత్పలం",
+        "బహువ్రీహి: మూడో అర్థం వస్తుంది → నీలకంఠుడు = నీల కంఠం గలవాడు (శివుడు)",
+        "ద్వంద్వ: రెండు పదాలు సమానం → రామలక్ష్మణులు = రాముడు మరియు లక్ష్మణుడు",
+        "అవ్యయీభావ: పూర్వపదం అవ్యయం, అర్థం ముఖ్యం → యథాశక్తి = శక్తికి తగినట్టు"
+      ],
+      howToAnswer:"సమాస question format:\n\nసమాసం పేరు: తత్పురుష సమాసం\nలక్షణం: ఉత్తరపదం ప్రధానంగా ఉంటుంది\nఉదాహరణ: దేశభక్తుడు\nవిగ్రహవాక్యం: దేశముపై భక్తి గలవాడు\n\nమరో ఉదాహరణ:\nరాజమార్గం = రాజు యొక్క మార్గం (తత్పురుష)\nమహాకవి = మహుడైన కవి (కర్మధారయ)\nచతుర్భుజుడు = నాలుగు భుజాలు గలవాడు అంటే విష్ణువు (బహువ్రీహి)",
+      examinerTip:"విగ్రహవాక్యం + సమాసం రకం రెండూ రాస్తే full marks. చాలా students సమాసం పేరు రాసి ఆపేస్తారు — అది చాలా తక్కువ marks తెస్తుంది.",
+      commonMistake:"బహువ్రీహి మరియు తత్పురుష కంఫ్యూజ్ అవడం. తత్పురుషంలో ఉత్తరపదం అర్థం వస్తుంది. బహువ్రీహిలో మూడో పదం అర్థం వస్తుంది.",
+      marks:"2M: ఒక సమాసం పూర్తిగా. 4M: రెండు సమాసాలు. 8M: అన్ని రకాలు ఉదాహరణలతో"
+    },
+    {
+      topic:"అలంకారాలు — రకాలు & ఉదాహరణలు",
+      approach:"అలంకారం అంటే భాషను అందంగా చేసే పద్ధతి. ముందు నిర్వచనం, తర్వాత ఉదాహరణ వాక్యం, తర్వాత వివరణ రాయాలి. ఈ మూడూ రాస్తేనే full marks.",
+      keyPoints:[
+        "ఉపమాలంకారం: పోలిక వంటి/వలె/పోలెడు శబ్దాలతో → చంద్రుని వంటి ముఖము",
+        "రూపకాలంకారం: పోలిక అభేదంగా, వంటి లేకుండా → చందమామ మొగము",
+        "ఉత్ప్రేక్షాలంకారం: వేరొకటి అని అనుమానం — మానో/జానో శబ్దం వస్తుంది",
+        "అతిశయోక్తి: అతిగా చెప్పడం → కొండంత ధైర్యం",
+        "అనుప్రాసాలంకారం: ఒకే అక్షరం పదే పదే వచ్చే అందం"
+      ],
+      howToAnswer:"ఉపమాలంకారం format:\n\nనిర్వచనం: ఒక వస్తువును మరొక వస్తువుతో పోల్చడాన్ని ఉపమాలంకారం అంటారు\nలక్షణాలు: ఉపమేయం, ఉపమానం, సాధారణ ధర్మం, ఉపమావాచకం అనే 4 భాగాలు\nఉదాహరణ: చంద్రుని వంటి ముఖము\nవివరణ: ముఖము=ఉపమేయం, చంద్రుడు=ఉపమానం, వంటి=ఉపమావాచకం\n\nరూపకాలంకారం:\nనిర్వచనం: ఉపమేయంపై ఉపమానాన్ని ఆరోపించడం\nఉదాహరణ: చందమామ మొగము — ముఖాన్నే చందమామ అన్నారు, వంటి అనలేదు",
+      examinerTip:"ఉదాహరణ వాక్యంలో అలంకార పదం underline చేయండి. examiner కి స్పష్టంగా కనిపిస్తుంది మరియు మీరు అర్థం చేసుకున్నారని తెలుస్తుంది.",
+      commonMistake:"ఉపమా మరియు రూపక అలంకారాలు కంఫ్యూజ్ అవడం. గుర్తు: ఉపమలో వంటి ఉంటుంది. రూపకంలో వంటి ఉండదు.",
+      marks:"2M: నిర్వచనం+ఉదాహరణ. 4M: మూడు అలంకారాలు పూర్తిగా. 8M: అన్ని అలంకారాలు"
+    },
+    {
+      topic:"ఛందస్సు — తేటగీతి & ఆటవెలది",
+      approach:"ఛందస్సు అంటే పద్యం యొక్క నిర్మాణ నియమాలు. గణాలు, అక్షరాల సంఖ్య, యతి స్థానం — ఈ మూడూ గుర్తుంచుకుంటే full marks వస్తాయి.",
+      keyPoints:[
+        "తేటగీతి: 3 సూర్యగణాలు + 1 గురులఘువు = 14 అక్షరాలు, యతి 10వ అక్షరం వద్ద",
+        "ఆటవెలది: 2 సూర్యగణాలు + 1 ఇంద్రగణం + 1 గురువు = 14 అక్షరాలు, యతి 8వ అక్షరం వద్ద",
+        "రెండింటికీ 14 అక్షరాలు — కానీ గణాలు వేరు, యతి స్థానం వేరు",
+        "సూర్యగణం = 3 అక్షరాలు (UII లేదా IUI లేదా IIU)",
+        "యతి = పద్యంలో విరుపు వచ్చే స్థానం"
+      ],
+      howToAnswer:"తేటగీతి లక్షణాలు:\nగణాలు: 3 సూర్యగణాలు + 1 గురులఘువు\nమొత్తం అక్షరాలు: 14\nయతి స్థానం: 10వ అక్షరం వద్ద\nఉదాహరణ: శ్రీరాముని చరిత్ర చింతించు వారికి\n\nఆటవెలది లక్షణాలు:\nగణాలు: 2 సూర్యగణాలు + 1 ఇంద్రగణం + 1 గురువు\nమొత్తం అక్షరాలు: 14\nయతి స్థానం: 8వ అక్షరం వద్ద\nఉదాహరణ: ఏనుగు లేనికాలమున ఇంటికి వత్తురు",
+      examinerTip:"తేటగీతి మరియు ఆటవెలది రెండింటికీ 14 అక్షరాలు అనే fact తెలిసినా, యతి స్థానం తేడా స్పష్టంగా రాయండి. ఆ తేడా చూసి marks ఇస్తారు.",
+      commonMistake:"తేటగీతి యతి 10, ఆటవెలది యతి 8 — తారుమారుగా రాయడం చాలా common. తేటగీతి = 10, ఆటవెలది = 8 అని గుర్తుంచుకోండి.",
+      marks:"2M: ఒక ఛందస్సు లక్షణాలు పూర్తిగా. 4M: రెండు ఛందస్సులు పోల్చి రాయడం"
+    },
+    {
+      topic:"అధికారిక లేఖ రాయడం",
+      approach:"లేఖలో format సగం marks తెస్తుంది. Format perfect గా నేర్చుకోండి — exam లో automatic గా రాయగలిగే వరకు practice చేయండి. Content కోసం brain వాడండి, format కోసం కాదు.",
+      keyPoints:[
+        "Format order: స్థలం → తేదీ → సేవలో → గ్రహీత పదవి+పేరు → విషయం → మహాశయా → body → మీ విధేయుడు → పేరు+తరగతి",
+        "విషయం line తప్పనిసరి — లేకుండా లేఖ incomplete అవుతుంది",
+        "Body లో 3 paragraphs: (1) కారణం/సమస్య (2) వివరణ (3) విన్నపం",
+        "అధికారికి రాస్తే: సేవలో, మహాశయా, మీ విధేయుడు",
+        "స్నేహితుడికి రాస్తే: ప్రియమైన, అభివందనాలతో, నీ ప్రేమగల మిత్రుడు"
+      ],
+      howToAnswer:"అధికారిక లేఖ format:\n\nహైదరాబాద్,\n14 మార్చి 2026.\n\nసేవలో,\nశ్రీ ప్రధానోపాధ్యాయులు వారికి,\nజ్ఞానోదయ పాఠశాల.\n\nవిషయం: అనారోగ్య కారణంగా 5 రోజుల సెలవు మంజూరు చేయగలరు.\n\nమహాశయా,\n\nవినయంగా విన్నవించుకుంటున్నాను. నాకు జ్వరం వచ్చి 5 రోజులుగా బాధపడుతున్నాను. వైద్యుడు పూర్తి విశ్రాంతి తీసుకోమని సలహా ఇచ్చారు.\n\nఈ పరిస్థితిలో పాఠశాలకు రాలేకపోతున్నాను. 5 రోజులు సెలవు మంజూరు చేయగలరని వినయంగా కోరుతున్నాను.\n\nమీ విధేయుడైన విద్యార్థి,\nకె. రాహుల్\n10వ తరగతి, బి విభాగం",
+      examinerTip:"స్థలం, తేదీ, విషయం — ఈ మూడు చూసి examiner వెంటనే 1M ఇస్తాడు. body లో మూడు paragraphs clearly రాయండి. ముగింపు మర్చిపోవద్దు.",
+      commonMistake:"విషయం line లేకుండా directly మహాశయా తో start అవడం — అత్యంత common mistake. స్థలం తేదీ మర్చిపోవడం కూడా చాలా మంది చేస్తారు.",
+      marks:"5M: format(1.5M) + విషయం(0.5M) + body(2.5M) + మూసివేత(0.5M)"
+    },
+    {
+      topic:"వ్యాసం రాయడం",
+      approach:"వ్యాసం అంటే ఒక అంశంపై మీ అభిప్రాయాలు వ్యక్తపరచడం. Structure: శీర్షిక → ముందుమాట → విస్తారం → ముగింపు. ఈ నాలుగు భాగాలు తప్పనిసరి.",
+      keyPoints:[
+        "శీర్షిక మర్చిపోవద్దు — దాన్ని underline చేయండి లేదా పెద్ద అక్షరాలలో రాయండి",
+        "ముందుమాట: అంశం పరిచయం + ఎందుకు ముఖ్యం (2-3 వాక్యాలు)",
+        "విస్తారం: 2-3 paragraphs లో ముఖ్య విషయాలు — కారణాలు, ప్రభావాలు, పరిష్కారాలు",
+        "ముగింపు: సారాంశం + మీ అభిప్రాయం + భవిష్యత్తు ఆశ",
+        "200-250 పదాలు రాయండి — తక్కువ రాస్తే marks తగ్గుతాయి"
+      ],
+      howToAnswer:"పర్యావరణ వ్యాసం structure:\n\nశీర్షిక: పర్యావరణ పరిరక్షణ\n\nPara 1 (ముందుమాట): పర్యావరణం అంటే ఏమిటి, ఎందుకు ముఖ్యం\n\nPara 2 (కారణాలు): వాహనాల పొగ, కర్మాగారాలు, అడవుల నరికివేత, ప్లాస్టిక్\n\nPara 3 (ప్రభావాలు): వాతావరణ మార్పులు, వరదలు, కరువు, వ్యాధులు\n\nPara 4 (పరిష్కారాలు): చెట్లు నాటడం, ప్లాస్టిక్ నిషేధం, సౌరశక్తి వాడకం\n\nPara 5 (ముగింపు): మన బాధ్యత, భవిష్యత్ తరాలకు మంచి ప్రపంచం అందించాలి",
+      examinerTip:"వ్యాసంలో paragraphs మధ్య space ఇవ్వండి. అది examiner కి organized గా కనిపిస్తుంది. శీర్షిక underline చేయండి — మొదటే కనిపిస్తుంది.",
+      commonMistake:"అన్ని విషయాలు ఒకే paragraph లో రాయడం — వ్యాసం లా కనిపించదు. Paragraph విభజన తప్పనిసరి. లేకుండా marks చాలా తగ్గుతాయి.",
+      marks:"8M: శీర్షిక(0.5M) + ముందుమాట(1M) + విస్తారం(5M) + ముగింపు(1M) + భాష(0.5M)"
+    },
+    {
+      topic:"సారాంశం రాయడం",
+      approach:"సారాంశం అంటే మూల గద్యంలో ముఖ్యమైన విషయాలను మీ సొంత భాషలో క్లుప్తంగా రాయడం. మూల పాఠం కంటే మూడో వంతు మాత్రమే రాయాలి.",
+      keyPoints:[
+        "మూల పాఠం రెండు సార్లు చదవండి — overview కోసం ఒకసారి, details కోసం ఒకసారి",
+        "ముఖ్యమైన ideas మాత్రమే రాయండి — అన్నీ రాయవద్దు",
+        "మీ సొంత భాషలో రాయాలి — మూల వాక్యాలు copy చేయకూడదు",
+        "మొదట రచయిత పేరు మరియు గద్యం శీర్షిక రాయండి",
+        "మొదటి పురుష వాచకం వాడకండి — 'రచయిత చెప్తున్నారు' అని రాయండి"
+      ],
+      howToAnswer:"సారాంశం రాసే steps:\n\nStep 1: గద్యం పూర్తిగా చదవండి\nStep 2: ముఖ్యమైన points rough లో note చేయండి\nStep 3: అనవసరమైన details తీసివేయండి\nStep 4: మీ భాషలో క్లుప్తంగా రాయండి\nStep 5: పాఠం మూడో వంతు మించకూడదు\n\nFormat:\n'_____ రచించిన _____ అనే గద్యంలో రచయిత ఇలా చెప్తున్నారు...\n[ముఖ్యమైన విషయాలు క్లుప్తంగా]\nఈ విధంగా రచయిత _____ గురించి వివరించారు.'",
+      examinerTip:"సారాంశం మొదట్లో రచయిత పేరు మరియు రచన పేరు రాయండి. చివర 'ఈ విధంగా రచయిత...' అని ముగించడం professional గా కనిపిస్తుంది.",
+      commonMistake:"మూల వాక్యాలు అలాగే copy చేయడం — అది సారాంశం కాదు. స్వంత భాషలో రాయడమే సారాంశం. Copy చేస్తే marks ఇవ్వరు.",
+      marks:"4M: ముఖ్యాంశాలు(2M) + స్వంత భాష+క్లుప్తత(1M) + format(1M)"
+    },
+    {
+      topic:"పద్య భాగం — అర్థం & భావం",
+      approach:"పద్యం question కి రెండు భాగాలు తప్పనిసరి: పదార్థాలు మరియు భావం. రెండూ రాస్తేనే full marks. కవి పేరు మరియు గ్రంథం పేరు మొదట రాయడం మర్చిపోవద్దు.",
+      keyPoints:[
+        "పదార్థాలు అంటే: పద్యంలో కష్టమైన పదాలకు అర్థాలు (కనీసం 5-6 పదాలు)",
+        "భావం అంటే: మొత్తం పద్యం యొక్క సారాన్ని మీ భాషలో చెప్పడం",
+        "కవి పేరు + గ్రంథం పేరు మొదట రాయడం mandatory",
+        "ఛందస్సు పేరు మరియు అలంకారం రాస్తే extra marks వస్తాయి",
+        "భావం simple Telugu లో రాయవచ్చు — complex గా రాయాల్సిన అవసరం లేదు"
+      ],
+      howToAnswer:"పద్యం question format:\n\nకవి: _____\nగ్రంథం: _____\nఛందస్సు: _____\n\nపదార్థాలు:\nపదం 1 = అర్థం\nపదం 2 = అర్థం\nపదం 3 = అర్థం (కనీసం 5 పదాలు)\n\nభావం:\nఈ పద్యంలో కవి _____ అని చెప్తున్నారు.\n[3-4 వాక్యాలలో పద్యం సారాంశం]\n\nఉదాహరణ: పోతన పద్యం అయితే — 'మహాకవి పోతనామాత్యుడు శ్రీమద్భాగవతంలో ఈ పద్యం ద్వారా...'",
+      examinerTip:"కవి పేరు + గ్రంథం పేరు రాయడం = 0.5M guaranteed. భావంలో మొదటి వాక్యం strong గా రాయండి — 'ఈ పద్యంలో కవి ___ విషయాన్ని అద్భుతంగా వర్ణించారు' అని.",
+      commonMistake:"పదార్థాలు మాత్రమే రాసి భావం వదలడం లేదా భావం మాత్రమే రాసి పదార్థాలు వదలడం. రెండూ రాయాలి — రెండూ marks ఇస్తాయి.",
+      marks:"4M: కవి+గ్రంథం(0.5M) + పదార్థాలు(1.5M) + భావం(2M). 8M: పెద్ద పద్యానికి"
+    },
+  ],
+  hindi: [
+    {
+      topic:"पत्र लेखन",
+      approach:"पत्र में format आधे marks है। Format याद करो, practice करो। Content तो आता है — format ही भूलते हैं ज़्यादातर छात्र।",
+      keyPoints:[
+        "Format order: स्थान → दिनांक → सेवा में → पता → विषय → महोदय → body → भवदीय → नाम",
+        "विषय line अनिवार्य — बिना इसके marks कटते हैं",
+        "Body में 3 parts: समस्या → विवरण → निवेदन",
+        "औपचारिक: महोदय से शुरू, भवदीय से समाप्त",
+        "'मैं चाहता हूँ' नहीं — 'मैं निवेदन करता हूँ' लिखो"
+      ],
+      howToAnswer:"Format:\n\nस्थान: हैदराबाद\nदिनांक: 10 मार्च 2026\n\nसेवा में,\nश्रीमान प्रधानाचार्य जी,\n\nविषय: 5 दिन छुट्टी हेतु\n\nमहोदय,\n[कारण लिखो]\n[विवरण दो]\n[निवेदन करो]\n\nआपका आज्ञाकारी छात्र,\n[नाम]",
+      examinerTip:"विषय line लिखना सबसे important। बहुत छात्र भूल जाते हैं। विषय = 0.5 mark guaranteed।",
+      commonMistake:"दिनांक और विषय भूलकर सीधे महोदय से शुरू करना — सबसे common गलती।",
+      marks:"4M: format(2M) + content(2M). हर format गलती पर 0.5M कट"
+    },
+    {
+      topic:"अलंकार",
+      approach:"अलंकार में तीन चीज़ें जरूरी: परिभाषा, उदाहरण, स्पष्टीकरण। तीनों हों तो full marks।",
+      keyPoints:[
+        "उपमा: तुलना हो, सा/सी/जैसे शब्द हों — 'चाँद जैसा मुखड़ा'",
+        "रूपक: अभेद तुलना, जैसे/सा नहीं — 'जीवन एक सफर है'",
+        "उत्प्रेक्षा: संभावना — मानो, जनु, जैसे शब्द",
+        "अतिशयोक्ति: बहुत बढ़ा-चढ़ाकर कहा गया हो",
+        "अनुप्रास: एक वर्ण बार-बार — 'कानन केलि कलित'"
+      ],
+      howToAnswer:"हर अलंकार के लिए:\n\n1. नाम: उपमा अलंकार\n2. परिभाषा: तुलना हो, सा/सी/जैसे शब्द हों\n3. उदाहरण: 'हरि पद कोमल कमल से'\n4. स्पष्टीकरण: हरि के पैरों की कमल से तुलना — इसलिए उपमा\n\nउदाहरण में अलंकार शब्द underline करो।",
+      examinerTip:"Underline करने से examiner को तुरंत दिखता है। Impression अच्छा होता है, marks मिलते हैं।",
+      commonMistake:"सिर्फ परिभाषा देकर उदाहरण छोड़ना। दोनों जरूरी हैं।",
+      marks:"2M: परिभाषा+उदाहरण. 4M: तीन अलंकार पूरे"
+    },
+  ],
+  english: [
+    {
+      topic:"Active and Passive Voice",
+      approach:"Passive voice follows one simple pattern. Identify tense first. Then: Object + correct 'be' + V3 + by + Subject. Same formula every time.",
+      keyPoints:[
+        "Object of active sentence → Subject of passive sentence",
+        "Present simple: is/are + V3",
+        "Past simple: was/were + V3",
+        "Future: will be + V3",
+        "If active subject is 'they/people/someone' — drop 'by them' in passive"
+      ],
+      howToAnswer:"Change 'The teacher teaches the students' to passive:\n\nObject = 'the students' → new subject\nTense = present simple → use 'are'\nVerb = teach → V3 is 'taught'\nOriginal subject = 'the teacher' → 'by the teacher'\n\nAnswer: 'The students are taught by the teacher'\n\nUnderline 'are taught' to show examiner what you changed.",
+      examinerTip:"Underline the passive verb form in your answer. Examiner sees exactly what you changed and gives full marks easily.",
+      commonMistake:"Using wrong form of 'be'. Present needs is/are. Past needs was/were. Using 'is' for past tense sentence is wrong.",
+      marks:"1M per sentence. Always write complete sentence — not just the verb."
+    },
+    {
+      topic:"Reported Speech",
+      approach:"Three types: statements, questions, commands. Each has its own rule. Learn the three rules and you can convert any sentence. Key: everything goes one tense back in time.",
+      keyPoints:[
+        "Statement: said that + tense shifts back (present→past)",
+        "Yes/No question: asked whether/if + statement form (no question mark!)",
+        "Wh-question: asked + wh-word + statement form",
+        "Command: told/asked + to + verb (remove 'please')",
+        "Change pronouns: I→he/she. Change time: now→then, today→that day"
+      ],
+      howToAnswer:"Statement: He said, 'I am going.'\nReported: He said that he was going.\n\nQuestion: She asked, 'Are you happy?'\nReported: She asked whether I was happy.\n\nCommand: He said, 'Please sit down.'\nReported: He asked me to sit down.",
+      examinerTip:"Time word changes get bonus marks: now→then, today→that day, tomorrow→the next day, here→there. Mention these in your answer.",
+      commonMistake:"Forgetting to change pronouns. 'I' in direct speech changes to 'he' or 'she' in reported speech — depending on who is speaking.",
+      marks:"1M: one sentence. 2M: type identified + correct conversion. 4M: all three types"
+    },
+    {
+      topic:"Essay Writing",
+      approach:"Essay is completely predictable. Same format every time. Practice 5 essays before exam and you can write any essay in exam hall confidently.",
+      keyPoints:[
+        "Always 4 paragraphs: Introduction, Body 1, Body 2, Conclusion",
+        "Introduction: define topic + say why it is important",
+        "Each body paragraph: one main point + one example",
+        "Conclusion: summarize + your personal view",
+        "Use linking words: Furthermore, However, Therefore, In addition"
+      ],
+      howToAnswer:"Essay on 'Importance of Trees':\n\nPara 1: Trees are one of nature's greatest gifts. They are essential for all life on Earth.\n\nPara 2: Trees give us oxygen to breathe. They absorb harmful CO₂ and release fresh air, keeping our environment clean.\n\nPara 3: Furthermore, trees prevent soil erosion and bring rainfall. They give us fruits, timber and medicines.\n\nPara 4: Therefore we must protect trees and plant more. A world without trees cannot support life.",
+      examinerTip:"First sentence of essay is most important. 'Trees are important' is weak. 'Trees are the lungs of our planet' is strong and impresses examiner immediately.",
+      commonMistake:"Writing one long paragraph instead of 4 separate ones. Paragraph breaks are very important in English. No breaks = looks like you don't know essay writing.",
+      marks:"8M: intro(2M) + body paras(4M) + conclusion(1M) + language(1M)"
+    },
+    {
+      topic:"Formal Letter Writing",
+      approach:"Letter format = 50% marks. Learn format so well that you write it automatically in exam. Then use all your thinking for the content.",
+      keyPoints:[
+        "Top right: Your address + date",
+        "Left: To, Designation, Organization, Address",
+        "Subject line: Sub: __________ — mandatory!",
+        "Salutation: Dear Sir/Madam",
+        "'Yours faithfully' when you don't know person. 'Yours sincerely' when you do"
+      ],
+      howToAnswer:"Format:\n\n15, MG Road, Hyderabad\n10th March, 2026\n\nTo,\nThe Municipal Commissioner,\nGreater Hyderabad Municipality\n\nSub: Poor drainage in our area\n\nDear Sir/Madam,\n\n[Para 1: Purpose of writing]\n[Para 2: Details/explanation]\n[Para 3: Request]\n\nYours faithfully,\n[Name]",
+      examinerTip:"Many students write 'Yours truly' — this is WRONG for formal letters. Use 'Yours faithfully'. Wrong closing = marks lost.",
+      commonMistake:"Putting sender's address on left side instead of right. Or forgetting Subject line. Two most common format mistakes.",
+      marks:"4M: format(2M) + content(2M). 8M: longer detailed letter required"
+    },
+  ],
+};
+
+function getExam(id){ const p=EXAM_POOLS[id]||EXAM_POOLS.maths; const order={"SECTION A":1,"SECTION B":2,"SECTION C":3,"SECTION D":4,"విభాగం A":1,"విభాగం B":2,"విభాగం C":3,"విభాగం D":4,"खंड A":1,"खंड B":2,"खंड C":3,"खंड D":4}; return [...p].sort(()=>Math.random()-0.5).slice(0,Math.min(p.length,6)).sort((a,b)=>(order[a.s]||5)-(order[b.s]||5)); }
+function dlText(name,txt){ const b=new Blob([txt],{type:"text/plain"}); const u=URL.createObjectURL(b); const a=document.createElement("a"); a.href=u; a.download=name; a.click(); URL.revokeObjectURL(u); }
+function useLS(k,i){ const [v,sv]=useState(i); const set=x=>{sv(x);}; return[v,set]; }
+
+// ═══════════════════════════════════════════════════════════════════════
+//  STYLES
+// ═══════════════════════════════════════════════════════════════════════
+const CSS=`
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700;800&family=Poppins:wght@400;500;600;700;800;900&family=Baloo+2:wght@700;800;900&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#060818;--card:#ffffff0d;--border:#ffffff12;--orange:#FF6B35;--text:#F0F4FF;--muted:#8892A4;}
+html,body{background:var(--bg);color:var(--text);font-family:'Poppins','Noto Sans Telugu',sans-serif;}
+.app{max-width:430px;margin:0 auto;min-height:100vh;background:var(--bg);}
+.screen{animation:fu .2s ease;padding-bottom:80px}
+@keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.hdr{background:linear-gradient(135deg,#0a0f2e,#1a1a4e,#0a1628);padding:14px 16px 12px;position:relative;overflow:hidden;}
+.hdr::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,#FF6B3512,transparent 60%),radial-gradient(ellipse at 80% 20%,#4ECDC412,transparent 60%)}
+.hdr-row{display:flex;align-items:center;gap:11px;position:relative;z-index:2;}
+.hdr-logo{width:46px;height:46px;background:linear-gradient(135deg,var(--orange),#FF9800);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 18px #FF6B3545;flex-shrink:0;}
+.hdr-name{font-family:'Baloo 2',cursive;font-size:20px;font-weight:900;background:linear-gradient(90deg,var(--orange),#FFD700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;}
+.hdr-sub{font-size:10px;color:var(--muted);letter-spacing:1.2px;margin-top:1px;}
+.chips{display:flex;gap:6px;padding:8px 16px 14px;flex-wrap:wrap;position:relative;z-index:2;}
+.chip{background:#ffffff0d;border:1px solid #ffffff15;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:600;color:rgba(255,255,255,.75);}
+.pad{padding:0 16px;}
+.sec{font-size:10px;font-weight:700;letter-spacing:1.3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+.card{background:#ffffff0d;border:1px solid #ffffff12;border-radius:16px;padding:14px;margin-bottom:10px;}
+.card-title{font-family:'Baloo 2',cursive;font-size:15px;font-weight:800;margin-bottom:10px;}
+/* SUBJECT GRID */
+.sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 12px;}
+.sub-card{background:#ffffff08;border:1.5px solid #ffffff12;border-radius:16px;padding:14px 10px;text-align:center;cursor:pointer;transition:.18s;}
+.sub-card:active{transform:scale(.95);}
+.sub-icon{font-size:26px;display:block;margin-bottom:5px;}
+.sub-name{font-size:11px;font-weight:700;}
+.sub-tname{font-size:10px;color:var(--muted);margin-top:2px;}
+/* BACK HEADER */
+.ph{padding:13px 16px 22px;position:relative;overflow:hidden;}
+.ph::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:20px;background:var(--bg);clip-path:ellipse(60% 100% at 50% 100%);}
+.ph-row{display:flex;align-items:center;gap:10px;position:relative;z-index:2;}
+.back{width:36px;height:36px;background:#ffffff15;border:1px solid #ffffff20;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px;flex-shrink:0;border:none;transition:.2s;}
+.back:active{transform:scale(.9);}
+.ph-title{font-family:'Baloo 2',cursive;font-size:17px;font-weight:800;}
+.ph-sub{font-size:10px;color:rgba(255,255,255,.6);margin-top:2px;}
+/* ROWS */
+.row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#ffffff08;border:1px solid #ffffff12;border-radius:13px;margin-bottom:7px;cursor:pointer;transition:.18s;}
+.row:active{background:#ffffff12;}
+.row-l{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;flex:1;line-height:1.4;}
+/* TABS */
+.tabs{display:flex;gap:7px;margin-bottom:14px;}
+.tab{flex:1;padding:9px 6px;border-radius:11px;border:1.5px solid #ffffff15;background:#ffffff08;color:var(--muted);font-weight:700;font-size:11px;cursor:pointer;text-align:center;transition:.18s;font-family:'Poppins',sans-serif;}
+.tab.on{border-color:var(--orange);background:#FF6B3518;color:var(--orange);}
+/* BUTTONS */
+.btn{width:100%;padding:13px;border-radius:13px;border:none;font-family:'Poppins','Noto Sans Telugu',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:.18s;margin-bottom:9px;line-height:1.3;}
+.btn:active{transform:scale(.97);}
+.btn-orange{background:linear-gradient(135deg,#CC4E1A,var(--orange),#FF9500);color:#fff;box-shadow:0 4px 20px #FF6B3540;}
+.btn-green{background:linear-gradient(135deg,#1a6b35,#27AE60,#2ECC71);color:#fff;}
+.btn-blue{background:linear-gradient(135deg,#1a3a6b,#45B7D1,#74b9ff);color:#fff;}
+.btn-ghost{background:#ffffff0a;color:rgba(255,255,255,.7);border:1px solid #ffffff18;}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+.b-orange{background:#FF6B3520;color:var(--orange);border:1px solid #FF6B3540;}
+.b-green{background:#27AE6020;color:#2ECC71;border:1px solid #27AE6040;}
+.b-cyan{background:#4ECDC420;color:#4ECDC4;border:1px solid #4ECDC440;}
+.b-yellow{background:#F7DC6F20;color:#F7DC6F;border:1px solid #F7DC6F40;}
+.b-red{background:#E74C3C20;color:#E74C3C;border:1px solid #E74C3C40;}
+.b-purple{background:#9B59B620;color:#9B59B6;border:1px solid #9B59B640;}
+/* BOXES */
+.box{border-radius:12px;padding:11px 14px;margin-bottom:11px;font-size:12px;font-weight:600;line-height:1.65;}
+.box-orange{background:#FF6B3512;border:1px solid #FF6B3525;color:#FFA07A;}
+.box-green{background:#27AE6012;border:1px solid #27AE6025;color:#2ECC71;}
+.box-blue{background:#45B7D112;border:1px solid #45B7D125;color:#74b9ff;}
+.box-yellow{background:#F7DC6F12;border:1px solid #F7DC6F25;color:#F7DC6F;}
+/* BASE CARDS */
+.must-card{background:#ffffff06;border:1px solid #ffffff10;border-radius:13px;margin-bottom:8px;overflow:hidden;}
+.must-head{padding:11px 14px;cursor:pointer;display:flex;align-items:flex-start;gap:10px;}
+.must-body{padding:0 14px 13px;border-top:1px solid #ffffff08;}
+.day-card{background:#ffffff08;border:1px solid #ffffff12;border-radius:13px;padding:13px;margin-bottom:8px;}
+/* EDGE */
+.step-item{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid #ffffff08;font-size:12px;line-height:1.6;}
+.step-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;}
+.tip-item{padding:9px 0;border-bottom:1px solid #ffffff08;font-size:12px;color:var(--text);line-height:1.7;}
+.dont-item{padding:8px 0;font-size:12px;color:#E74C3C;line-height:1.6;}
+/* EXAM */
+.exam-q-card{background:#ffffff08;border:1px solid #ffffff12;border-radius:14px;padding:14px;margin-bottom:10px;}
+.timer{background:#ffffff0a;border:1px solid #ffffff15;border-radius:11px;padding:8px 14px;text-align:center;font-size:20px;font-weight:900;color:#F7DC6F;margin-bottom:12px;font-family:'Baloo 2',cursive;}
+.timer.red{color:#E74C3C;animation:pulse .5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.upload-area{border:2px dashed #ffffff25;border-radius:14px;padding:30px 20px;text-align:center;margin:14px 0;cursor:pointer;transition:.2s;}
+.upload-area:active{border-color:var(--orange);background:#FF6B3508;}
+.ai-eval{background:#4ECDC410;border:1px solid #4ECDC425;border-radius:11px;padding:12px;margin-top:8px;font-size:12px;line-height:1.75;color:#4ECDC4;white-space:pre-wrap;}
+/* NAV */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#0a0f2e;border-top:1px solid #ffffff15;display:flex;z-index:100;box-shadow:0 -4px 20px #00000050;}
+.nav-btn{flex:1;padding:9px 2px;text-align:center;cursor:pointer;border:none;background:none;color:var(--muted);font-family:'Poppins',sans-serif;transition:.18s;}
+.nav-btn.on{color:var(--orange);}
+.nav-icon{font-size:20px;display:block;}
+.nav-lbl{font-size:9px;font-weight:700;letter-spacing:.4px;margin-top:1px;}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#0D1117;border:1px solid #ffffff20;border-radius:12px;padding:10px 20px;font-size:13px;font-weight:700;color:#fff;z-index:999;box-shadow:0 6px 24px #00000060;white-space:nowrap;animation:tin .25s ease;}
+@keyframes tin{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+input{background:#ffffff0d;border:1.5px solid #ffffff15;border-radius:12px;padding:12px 14px;color:var(--text);font-family:'Poppins','Noto Sans Telugu',sans-serif;font-size:13px;outline:none;width:100%;margin-bottom:9px;transition:.2s;}
+input:focus{border-color:var(--orange);}
+input::placeholder{color:var(--muted);}
+select{background:#ffffff0d;border:1.5px solid #ffffff15;border-radius:12px;padding:12px 14px;color:var(--text);font-size:13px;outline:none;width:100%;margin-bottom:9px;cursor:pointer;font-family:'Poppins',sans-serif;}
+select option{background:#1a1a4e;}
+.typing{display:inline-flex;gap:4px;padding:4px 0;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:bop .8s ease infinite;}
+.dot:nth-child(2){animation-delay:.16s}.dot:nth-child(3){animation-delay:.32s}
+@keyframes bop{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-8px);opacity:1}}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#FF6B3545;border-radius:3px}
+`;
+
+// ═══════════════════════════════════════════════════════════════════════
+//  MAIN APP
+// ═══════════════════════════════════════════════════════════════════════
+export default function App(){
+  const [student,setStudent]=useLS("p2t_s",null);
+  const [tab,setTab]=useState("learn");
+  const [page,setPage]=useState("home");
+  const [selSub,setSelSub]=useState(null);
+  const [examSub,setExamSub]=useState(null);
+  const [examFrom,setExamFrom]=useState("home");
+  const [toast,setToast]=useState("");
+  const showToast=m=>{setToast(m);setTimeout(()=>setToast(""),2500);};
+
+  if(!student) return <Login onLogin={s=>{setStudent(s);}}/>;
+
+  const subFound=SUBJECTS.find(s=>s.id===selSub)||SUBJECTS[0];
+  const examSubFound=SUBJECTS.find(s=>s.id===examSub)||SUBJECTS[0];
+
+  if(page==="subject") return <SubjectPage sub={subFound} onBack={()=>setPage("home")} onExam={()=>{setExamSub(selSub);setExamFrom("subject");setPage("exam");}} showToast={showToast}/>;
+  if(page==="exam") return <ExamPage sub={examSubFound} onBack={()=>{if(examFrom==="subject"){setPage("subject");}else{setPage("home");}}} showToast={showToast}/>;
+
+  return (<>
+    <style>{CSS}</style>
+    {toast&&<div className="toast">{toast}</div>}
+    <div className="app">
+      {tab==="learn"&&<LearnTab onSub={id=>{setSelSub(id);setPage("subject");}} student={student}/>}
+      {tab==="base"&&<BaseTab onSub={id=>{setSelSub(id);setPage("subject");}}/>}
+      {tab==="edge"&&<EdgeTab/>}
+      {tab==="exam"&&<ExamPickTab onExam={id=>{setExamSub(id);setExamFrom("home");setPage("exam");}}/>}
+      <nav className="nav">
+        {[{id:"learn",icon:"📚",lbl:"LEARN"},{id:"base",icon:"🏗️",lbl:"BASE"},{id:"edge",icon:"⚔️",lbl:"EDGE"},{id:"exam",icon:"📝",lbl:"EXAM"}]
+          .map(n=><button key={n.id} className={`nav-btn${tab===n.id?" on":""}`} onClick={()=>setTab(n.id)}><span className="nav-icon">{n.icon}</span><span className="nav-lbl">{n.lbl}</span></button>)}
+      </nav>
+    </div>
+  </>);
+}
+
+// ── LOGIN ─────────────────────────────────────────────────────────────────────
+function Login({onLogin}){
+  const [step,setStep]=useState(0);
+  const [form,setForm]=useState({name:"",school:"",goal:""});
+  return (<>
+    <style>{CSS}</style>
+    <div className="app" style={{minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"24px 20px",background:"linear-gradient(160deg,#060818,#0a1628,#1a0a28)"}}>
+      <div style={{fontSize:60,marginBottom:16,textShadow:"0 0 40px #FF6B35"}}>📚</div>
+      <div style={{fontFamily:"'Baloo 2',cursive",fontSize:34,fontWeight:900,background:"linear-gradient(90deg,#FF6B35,#FFD700)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",marginBottom:4}}>Pass2Top</div>
+      <div style={{fontSize:11,color:"#8892A4",letterSpacing:1.5,marginBottom:4}}>TELANGANA STATE BOARD SSC 2026</div>
+      <div style={{fontSize:10,color:"#6b7a99",marginBottom:28}}>bse.telangana.gov.in</div>
+      {step===0&&<>
+        <div className="card" style={{width:"100%",maxWidth:360,marginBottom:16}}>
+          <div className="card-title" style={{background:"linear-gradient(90deg,#FF6B35,#FFD700)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>Your Journey</div>
+          <div style={{fontSize:12,color:"#8892A4",lineHeight:2.1}}>
+            📚 <strong style={{color:"#F0F4FF"}}>Learn</strong> — Full TS Board Syllabus<br/>
+            🏗️ <strong style={{color:"#FF6B35"}}>Base</strong> — Build foundation, guaranteed pass<br/>
+            ⚔️ <strong style={{color:"#4ECDC4"}}>Edge</strong> — Revision + Exam strategy to top<br/>
+            📝 <strong style={{color:"#9B59B6"}}>Exam</strong> — Practice with real paper pattern
+          </div>
+        </div>
+        <button className="btn btn-orange" style={{maxWidth:360,width:"100%"}} onClick={()=>setStep(1)}>Start My Journey 🚀</button>
+      </>}
+      {step===1&&<div style={{width:"100%",maxWidth:360}}>
+        <div className="box box-orange" style={{textAlign:"center",marginBottom:16}}>👤 మీ వివరాలు చెప్పండి</div>
+        <input placeholder="మీ పూర్తి పేరు *" value={form.name} onChange={e=>setForm({...form,name:e.target.value})}/>
+        <input placeholder="పాఠశాల పేరు" value={form.school} onChange={e=>setForm({...form,school:e.target.value})}/>
+        <div className="sec" style={{marginBottom:8}}>మీ లక్ష్యం:</div>
+        {["Pass (35+)","Good Score (60+)","Distinction (75+)","Topper (90+)"].map(g=><button key={g} onClick={()=>setForm({...form,goal:g})} style={{display:"block",width:"100%",textAlign:"left",background:form.goal===g?"#FF6B3520":"#ffffff0a",border:`1.5px solid ${form.goal===g?"var(--orange)":"#ffffff15"}`,borderRadius:12,padding:"11px 14px",color:form.goal===g?"var(--orange)":"var(--text)",fontSize:13,fontWeight:700,cursor:"pointer",marginBottom:8,fontFamily:"'Poppins',sans-serif"}}>{g}</button>)}
+        <button className="btn btn-orange" style={{marginTop:8}} onClick={()=>{if(form.name.trim()&&form.goal)onLogin(form);else alert("పేరు మరియు లక్ష్యం ఎంచుకోండి!");}}>🚀 Start</button>
+        <button className="btn btn-ghost" onClick={()=>setStep(0)}>← వెనక్కి</button>
+      </div>}
+    </div>
+  </>);
+}
+
+// ── LEARN TAB ─────────────────────────────────────────────────────────────────
+function LearnTab({onSub,student}){
+  return <div className="screen">
+    <div className="hdr">
+      <div className="hdr-row">
+        <div className="hdr-logo">📚</div>
+        <div>
+          <div className="hdr-name">Pass2Top</div>
+          <div className="hdr-sub">TELANGANA STATE BOARD SSC 2026 · bse.telangana.gov.in</div>
+        </div>
+      </div>
+      <div className="chips">
+        <span className="chip">✅ TS State Board Only</span>
+        <span className="chip">📋 Official Syllabus</span>
+        <span className="chip">👤 {student?.name?.split(" ")[0]}</span>
+      </div>
+    </div>
+    <div className="pad" style={{paddingTop:16}}>
+      <div className="box box-yellow">🏛️ TS SSC 2026 Exam: March 14 – April 16 · Pass: 35/100</div>
+      <div className="sec">అన్ని సబ్జెక్టులు — CLICK TO VIEW SYLLABUS</div>
+    </div>
+    <div className="sub-grid">
+      {SUBJECTS.map(s=><div key={s.id} className="sub-card" style={{borderColor:s.color+"40"}} onClick={()=>onSub(s.id)}>
+        <span className="sub-icon">{s.icon}</span>
+        <div className="sub-name" style={{color:s.color}}>{s.name}</div>
+        <div className="sub-tname">{s.tname}</div>
+      </div>)}
+    </div>
+  </div>;
+}
+
+// ── BASE TAB ──────────────────────────────────────────────────────────────────
+function BaseTab(){
+  const [selSub,setSelSub]=useState("maths");
+  const [activeTab,setActiveTab]=useState("mustStudy");
+  const [expanded,setExpanded]=useState({});
+  const sub=SUBJECTS.find(s=>s.id===selSub);
+  const data=BASE[selSub]||BASE.maths;
+
+  return <div className="screen">
+    <div className="hdr">
+      <div className="hdr-row">
+        <div className="hdr-logo">🏗️</div>
+        <div>
+          <div className="hdr-name" style={{background:"linear-gradient(90deg,#FF6B35,#FF9500)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>Base</div>
+          <div className="hdr-sub">Build Your Foundation · Guaranteed Pass</div>
+        </div>
+      </div>
+    </div>
+    <div className="pad" style={{paddingTop:14}}>
+      <div className="box box-orange">🏗️ <strong>Base = Pass.</strong> Study these topics → you WILL pass TS SSC 2026. No shortcuts, no gimmicks.</div>
+
+      {/* Subject selector */}
+      <div style={{display:"flex",gap:6,overflowX:"auto",paddingBottom:8,marginBottom:12,scrollbarWidth:"none"}}>
+        {SUBJECTS.map(s=><button key={s.id} onClick={()=>setSelSub(s.id)} style={{flexShrink:0,background:selSub===s.id?s.color+"25":"#ffffff08",border:`1.5px solid ${selSub===s.id?s.color:"#ffffff15"}`,borderRadius:20,padding:"6px 14px",color:selSub===s.id?s.color:"var(--muted)",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"'Poppins',sans-serif",whiteSpace:"nowrap"}}>{s.icon} {s.name}</button>)}
+      </div>
+
+      <div className="tabs">
+        {[{id:"mustStudy",lbl:"⭐ Must Study"},{id:"plan",lbl:"📅 5 Day Plan"}]
+          .map(t=><button key={t.id} className={`tab${activeTab===t.id?" on":""}`} onClick={()=>setActiveTab(t.id)}>{t.lbl}</button>)}
+      </div>
+
+      {/* MUST STUDY */}
+      {activeTab==="mustStudy"&&<>
+        <div className="box box-green">✅ These questions appear <strong>EVERY YEAR</strong> in TS SSC. Learn them = pass guaranteed!</div>
+        {data.mustStudy.map((item,i)=>{
+          const open=expanded[i];
+          return <div key={i} className="must-card">
+            <div className="must-head" onClick={()=>setExpanded({...expanded,[i]:!open})}>
+              <div style={{flex:1}}>
+                <div style={{display:"flex",gap:6,marginBottom:5,flexWrap:"wrap"}}>
+                  <span className="badge b-orange">{item.topic}</span>
+                  <span className="badge b-yellow">{item.imp}</span>
+                  <span className="badge b-cyan">{item.marks}</span>
                 </div>
-            );
+                <div style={{fontSize:13,fontWeight:600,color:"var(--text)",lineHeight:1.55}}>{item.q}</div>
+              </div>
+              <span style={{color:sub.color,fontSize:16,marginLeft:8,flexShrink:0}}>{open?"▲":"▼"}</span>
+            </div>
+            {open&&<div className="must-body">
+              <div style={{fontSize:10,fontWeight:800,letterSpacing:1,color:"#2ECC71",marginBottom:6,marginTop:10}}>✅ MODEL ANSWER</div>
+              <div style={{fontSize:13,color:"var(--text)",lineHeight:1.75,whiteSpace:"pre-line"}}>{item.a}</div>
+              <div style={{marginTop:8,fontSize:10,color:"var(--muted)",fontWeight:600}}>📅 Asked in: {item.years}</div>
+            </div>}
+          </div>;
+        })}
+      </>}
 
-            return (
-                <div className="app-container">
-                    {view === 'home' ? renderHome() : (
-                        <div style={{padding: '20px'}}>
-                            <button onClick={() => setView('home')} style={{background: 'none', color: 'white', border: 'none', fontSize: '18px', marginBottom: '20px'}}>← Back</button>
-                            <h2 style={{color: selectedSub.color}}>{selectedSub.icon} {selectedSub.name}</h2>
-                            <div className="card">
-                                <h3>Syllabus Guide</h3>
-                                <p style={{fontSize: '13px', lineHeight: '1.6', marginTop: '10px'}}>Complete chapter-wise focus for {selectedSub.name}.</p>
-                            </div>
-                            <button className="btn btn-orange">Open Study Material</button>
-                        </div>
-                    )}
+      {/* 5 DAY PLAN */}
+      {activeTab==="plan"&&<>
+        <div className="box box-blue">📅 <strong>5 Day Emergency Plan</strong> — Follow this exactly and you WILL pass {sub.name}!</div>
+        {data.plan5days.map((d,i)=><div key={i} className="day-card">
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+            <span style={{fontFamily:"'Baloo 2',cursive",fontSize:16,fontWeight:900,color:sub.color}}>Day {d.day}</span>
+            <span className="badge b-green">{d.marks} exam</span>
+          </div>
+          <div style={{fontSize:14,fontWeight:700,color:"var(--text)",marginBottom:4}}>{d.focus}</div>
+          <div style={{fontSize:12,color:"var(--muted)"}}>{d.target}</div>
+        </div>)}
+      </>}
+    </div>
+  </div>;
+}
 
-                    <nav className="nav">
-                        <button className={`nav-btn ${tab === 'learn' ? 'active' : ''}`} onClick={() => {setTab('learn'); setView('home');}}><span className="nav-icon">📚</span>LEARN</button>
-                        <button className={`nav-btn ${tab === 'base' ? 'active' : ''}`} onClick={() => {setTab('base'); setView('home');}}><span className="nav-icon">🏗️</span>BASE</button>
-                        <button className={`nav-btn ${tab === 'exam' ? 'active' : ''}`} onClick={() => {setTab('exam'); setView('home');}}><span className="nav-icon">📝</span>EXAM</button>
-                    </nav>
-                </div>
-            );
-        }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<Pass2Top />);
+// ── EDGE TAB ──────────────────────────────────────────────────────────────────
+function EdgeTab(){
+  const [selSub,setSelSub]=useState("maths");
+  const [selTopic,setSelTopic]=useState(null);
+  const sub=SUBJECTS.find(s=>s.id===selSub);
+  const topics=EXAM_STRATEGY[selSub]||[];
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
-        }
-    </script>
-</body>
-</html>
+  return <div className="screen">
+    <div className="hdr">
+      <div className="hdr-row">
+        <div className="hdr-logo">⚔️</div>
+        <div>
+          <div className="hdr-name" style={{background:"linear-gradient(90deg,#4ECDC4,#74b9ff)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>Edge</div>
+          <div className="hdr-sub">Exam Strategy · How to Answer · Key Points · Tips</div>
+        </div>
+      </div>
+    </div>
+    <div className="pad" style={{paddingTop:14}}>
+      <div className="box box-blue">⚔️ <strong>Base = Pass. Base + Edge = Top.</strong> Learn how to write answers the way examiner wants!</div>
+
+      {/* Subject selector */}
+      <div style={{display:"flex",gap:6,overflowX:"auto",paddingBottom:8,marginBottom:12,scrollbarWidth:"none"}}>
+        {SUBJECTS.map(s=><button key={s.id} onClick={()=>{setSelSub(s.id);setSelTopic(null);}} style={{flexShrink:0,background:selSub===s.id?s.color+"25":"#ffffff08",border:`1.5px solid ${selSub===s.id?s.color:"#ffffff15"}`,borderRadius:20,padding:"6px 14px",color:selSub===s.id?s.color:"var(--muted)",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"'Poppins',sans-serif",whiteSpace:"nowrap"}}>{s.icon} {s.name}</button>)}
+      </div>
+
+      {/* Topic not selected — show list */}
+      {!selTopic&&<>
+        <div className="sec" style={{color:sub.color}}>SELECT TOPIC — TAP TO SEE STRATEGY</div>
+        {topics.map((t,i)=><div key={i} className="row" style={{borderColor:sub.color+"25",cursor:"pointer"}} onClick={()=>setSelTopic(t)}>
+          <div className="row-l">
+            <div style={{width:30,height:30,borderRadius:9,background:sub.color+"20",color:sub.color,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:900,flexShrink:0}}>{i+1}</div>
+            <div>
+              <div style={{fontSize:13,fontWeight:700,color:"var(--text)"}}>{t.topic}</div>
+              <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>{t.marks}</div>
+            </div>
+          </div>
+          <span style={{color:sub.color,fontSize:13}}>→</span>
+        </div>)}
+        {topics.length===0&&<div className="box box-orange">📝 Content for {sub.name} being added soon!</div>}
+      </>}
+
+      {/* Topic selected — show full strategy */}
+      {selTopic&&<>
+        <button onClick={()=>setSelTopic(null)} style={{background:"#ffffff0a",border:"1px solid #ffffff18",borderRadius:10,padding:"7px 14px",color:"rgba(255,255,255,.7)",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"'Poppins',sans-serif",marginBottom:14,display:"flex",alignItems:"center",gap:6}}>← All Topics</button>
+
+        {/* Topic header */}
+        <div style={{background:`linear-gradient(135deg,${sub.color}18,${sub.color}08)`,border:`1.5px solid ${sub.color}40`,borderRadius:16,padding:16,marginBottom:12}}>
+          <div style={{fontFamily:"'Baloo 2',cursive",fontSize:18,fontWeight:900,color:sub.color,marginBottom:6}}>{selTopic.topic}</div>
+          <div style={{fontSize:12,color:"rgba(255,255,255,.8)",lineHeight:1.65}}>{selTopic.approach}</div>
+        </div>
+
+        {/* Key Points */}
+        <div className="card" style={{marginBottom:10,borderColor:sub.color+"30"}}>
+          <div className="card-title" style={{color:"#F7DC6F",fontSize:13}}>⭐ Key Points to Remember</div>
+          {selTopic.keyPoints.map((p,i)=><div key={i} style={{display:"flex",gap:9,padding:"6px 0",borderBottom:"1px solid #ffffff08",alignItems:"flex-start"}}>
+            <span style={{color:sub.color,fontWeight:900,fontSize:13,flexShrink:0,minWidth:18}}>{i+1}.</span>
+            <span style={{fontSize:12,color:"var(--text)",lineHeight:1.6}}>{p}</span>
+          </div>)}
+        </div>
+
+        {/* How to Answer */}
+        <div className="card" style={{marginBottom:10,borderColor:"#27AE6040"}}>
+          <div className="card-title" style={{color:"#2ECC71",fontSize:13}}>✍️ How to Write Your Answer</div>
+          <div style={{fontSize:12,color:"var(--text)",lineHeight:2,whiteSpace:"pre-line",background:"#27AE6008",borderRadius:10,padding:"10px 12px"}}>{selTopic.howToAnswer}</div>
+          <div style={{marginTop:10,fontSize:11,color:"var(--muted)",fontWeight:600}}>📋 Format: {selTopic.answerFormat}</div>
+        </div>
+
+        {/* Marks breakdown */}
+        <div className="card" style={{marginBottom:10,borderColor:"#FF6B3540"}}>
+          <div className="card-title" style={{color:"var(--orange)",fontSize:13}}>🎯 Marks Breakdown</div>
+          <div style={{fontSize:12,color:"var(--text)",lineHeight:1.8}}>{selTopic.marks}</div>
+        </div>
+
+        {/* Tip */}
+        <div style={{background:"#4ECDC412",border:"1.5px solid #4ECDC430",borderRadius:13,padding:"12px 14px",marginBottom:10}}>
+          <div style={{fontSize:12,color:"#4ECDC4",fontWeight:700,lineHeight:1.7}}>{selTopic.tip}</div>
+        </div>
+
+        {/* Avoid */}
+        <div style={{background:"#E74C3C0a",border:"1.5px solid #E74C3C30",borderRadius:13,padding:"12px 14px",marginBottom:14}}>
+          <div style={{fontSize:11,fontWeight:800,color:"#E74C3C",marginBottom:6,letterSpacing:.5}}>⚠️ AVOID THIS MISTAKE</div>
+          <div style={{fontSize:12,color:"#E74C3C",lineHeight:1.7}}>{selTopic.avoid}</div>
+        </div>
+
+        <button onClick={()=>setSelTopic(null)} className="btn btn-ghost">← Back to Topics</button>
+      </>}
+    </div>
+  </div>;
+}
+
+// ── EXAM PICK TAB ─────────────────────────────────────────────────────────────
+function ExamPickTab({onExam}){
+  return <div className="screen">
+    <div className="hdr">
+      <div className="hdr-row">
+        <div className="hdr-logo">📝</div>
+        <div>
+          <div className="hdr-name" style={{background:"linear-gradient(90deg,#9B59B6,#DDA0DD)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>Exam</div>
+          <div className="hdr-sub">TS Board Pattern · Write on Paper · AI Evaluates Photo</div>
+        </div>
+      </div>
+    </div>
+    <div className="pad" style={{paddingTop:16}}>
+      <div className="box box-blue">📝 Get question paper → Write answers on paper → Upload photo → AI evaluates your handwritten answers!</div>
+      <div className="sec">SELECT SUBJECT</div>
+      {SUBJECTS.map(s=><div key={s.id} className="row" style={{borderColor:s.color+"30"}} onClick={()=>onExam(s.id)}>
+        <div className="row-l"><span style={{fontSize:22}}>{s.icon}</span>
+          <div><div style={{color:s.color}}>{s.name}</div><div style={{fontSize:10,color:"var(--muted)",marginTop:1}}>TS Board Pattern · Fresh Questions Every Time</div></div>
+        </div>
+        <span style={{color:"var(--muted)",fontSize:13}}>→</span>
+      </div>)}
+    </div>
+  </div>;
+}
+
+// ── SUBJECT PAGE (LEARN) ──────────────────────────────────────────────────────
+function SubjectPage({sub,onBack,onExam,showToast}){
+  const syl=SYLLABUS[sub.id];
+  return (<>
+    <style>{CSS}</style>
+    <div className="app">
+      <div className="ph" style={{background:`linear-gradient(135deg,${sub.color}22,${sub.color}44)`,borderBottom:`1px solid ${sub.color}33`}}>
+        <div className="ph-row">
+          <button className="back" onClick={onBack}>←</button>
+          <div style={{flex:1}}>
+            <div className="ph-title">{sub.icon} {sub.name}</div>
+            <div className="ph-sub">{sub.tname} · TS State Board Official Syllabus</div>
+          </div>
+        </div>
+      </div>
+      <div className="pad" style={{paddingTop:16,paddingBottom:90}}>
+        <button className="btn btn-orange" onClick={onExam}>📝 Try Exam — {sub.name}</button>
+        <div className="box box-blue" style={{fontSize:11}}>📚 Below is the <strong>complete official TS Board syllabus</strong> for {sub.name}. These are ALL the chapters in your exam.</div>
+        {syl?.papers.map((paper,pi)=><div key={pi}>
+          <div className="sec" style={{color:sub.color,marginTop:pi>0?14:0}}>{paper.name}</div>
+          {paper.chapters.map(ch=><div key={ch.n} className="row" style={{borderColor:sub.color+"20",cursor:"default"}}>
+            <div className="row-l">
+              <div style={{width:28,height:28,borderRadius:8,background:sub.color+"20",color:sub.color,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:800,flexShrink:0,fontFamily:"'Baloo 2',cursive"}}>{ch.n}</div>
+              <div style={{fontSize:13,fontWeight:600,color:"var(--text)",lineHeight:1.4}}>{ch.title}</div>
+            </div>
+          </div>)}
+        </div>)}
+      </div>
+    </div>
+  </>);
+}
+
+// ── EXAM PAGE ─────────────────────────────────────────────────────────────────
+function ExamPage({sub,onBack,showToast}){
+  const [questions]=useState(()=>getExam(sub.id));
+  const [stage,setStage]=useState("paper");
+  const [uploaded,setUploaded]=useState(null);
+  const [evalResult,setEvalResult]=useState("");
+  const [evalLoading,setEvalLoading]=useState(false);
+  const fileRef=useRef(null);
+
+  const dlPaper=()=>{
+    let txt=`TELANGANA STATE BOARD SSC 2026\nSubject: ${sub.name.toUpperCase()}\nTime: 2 hr 45 min  Max Marks: ${questions.reduce((a,q)=>a+q.m,0)}\n${"═".repeat(50)}\n\n`;
+    let lastSec="";
+    questions.forEach((q,i)=>{
+      if(q.s!==lastSec){lastSec=q.s;txt+=`\n${q.s}\n${"─".repeat(30)}\n`;}
+      txt+=`${i+1}. ${q.q}  [${q.m}M]\n\n`;
+    });
+    txt+=`\n${"═".repeat(50)}\n*** All the Best! Pass2Top ***`;
+    dlText(`TS_SSC_${sub.name}_Exam.txt`,txt);
+    showToast("✅ Question paper downloaded!");
+  };
+
+  const handleUpload=e=>{
+    const file=e.target.files?.[0];
+    if(!file)return;
+    const reader=new FileReader();
+    reader.onload=ev=>{setUploaded({b64:ev.target.result.split(",")[1],name:file.name});setStage("upload");showToast("📸 Uploaded!");};
+    reader.readAsDataURL(file);
+  };
+
+  const evaluate=async()=>{
+    setEvalLoading(true);
+    try{
+      const qList=questions.map((q,i)=>`Q${i+1}(${q.m}M): ${q.q}`).join("\n");
+      const resp=await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1200,
+          messages:[{role:"user",content:[
+            {type:"image",source:{type:"base64",media_type:"image/jpeg",data:uploaded.b64}},
+            {type:"text",text:`You are a TS SSC 2026 examiner for ${sub.name}.\nQuestions:\n${qList}\n\nEvaluate the handwritten answers in the image. Give:\n1. Score for each question (X/Y marks)\n2. Total score\n3. What was good ✅\n4. What was missing ❌\n5. Encouraging message\n\nBe fair and encouraging like a TS Board teacher!`}
+          ]}]})
+      });
+      const d=await resp.json();
+      setEvalResult(d.content?.[0]?.text||"Could not evaluate. Please try again.");
+      setStage("result");
+    }catch(e){setEvalResult("⚠️ "+e.message);setStage("result");}
+    setEvalLoading(false);
+  };
+
+  return (<>
+    <style>{CSS}</style>
+    <div className="app">
+      <div className="ph" style={{background:`linear-gradient(135deg,${sub.color}22,${sub.color}44)`}}>
+        <div className="ph-row">
+          <button className="back" onClick={onBack}>←</button>
+          <div>
+            <div className="ph-title">{sub.icon} {sub.name} — Exam</div>
+            <div className="ph-sub">Write on paper → Upload photo → Get AI evaluation</div>
+          </div>
+        </div>
+      </div>
+      <div className="pad" style={{paddingTop:14,paddingBottom:90}}>
+
+        {stage==="paper"&&<>
+          <button onClick={dlPaper} style={{width:"100%",background:"linear-gradient(135deg,#27AE6020,#27AE6040)",border:"1.5px solid #27AE6060",borderRadius:12,padding:"13px",color:"#2ECC71",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"'Poppins',sans-serif",marginBottom:10}}>⬇️ Download Question Paper</button>
+          <div className="box box-yellow">📝 Read questions → Write answers on paper with pen → Take clear photo → Upload for AI evaluation!</div>
+          <div style={{background:"#ffffff06",border:`1px solid ${sub.color}30`,borderRadius:16,padding:16,marginBottom:14}}>
+            <div style={{textAlign:"center",marginBottom:14,borderBottom:`1px solid ${sub.color}30`,paddingBottom:12}}>
+              <div style={{fontFamily:"'Baloo 2',cursive",fontSize:15,fontWeight:900,color:sub.color}}>TELANGANA STATE BOARD SSC 2026</div>
+              <div style={{fontSize:13,fontWeight:700,marginTop:3}}>{sub.name.toUpperCase()}</div>
+              <div style={{fontSize:11,color:"var(--muted)",marginTop:3}}>Time: 2hr 45min · Max: {questions.reduce((a,q)=>a+q.m,0)} Marks</div>
+            </div>
+            {(()=>{let ls="";return questions.map((q,i)=>{const ss=q.s!==ls;ls=q.s;return <div key={i}>{ss&&<div style={{fontSize:11,fontWeight:800,color:sub.color,letterSpacing:1,marginTop:12,marginBottom:8,textTransform:"uppercase"}}>{q.s} · {q.m} Mark{q.m>1?"s":""} each</div>}<div style={{display:"flex",gap:10,marginBottom:12,alignItems:"flex-start"}}><span style={{fontWeight:800,color:sub.color,fontSize:13,minWidth:22}}>{i+1}.</span><div style={{fontSize:13,fontWeight:600,flex:1,lineHeight:1.6}}>{q.q}</div><span className="badge b-orange" style={{flexShrink:0,alignSelf:"flex-start"}}>{q.m}M</span></div></div>;});})()}
+          </div>
+          <input ref={fileRef} type="file" accept="image/*" capture="environment" style={{display:"none"}} onChange={handleUpload}/>
+          <button className="btn btn-orange" onClick={()=>fileRef.current?.click()}>📷 Upload Answer Paper (Camera)</button>
+          <button className="btn btn-ghost" style={{fontSize:12}} onClick={()=>{fileRef.current?.removeAttribute("capture");fileRef.current?.click();}}>🖼️ Choose from Gallery</button>
+        </>}
+
+        {stage==="upload"&&<>
+          <div className="box box-green">✅ Uploaded: <strong>{uploaded?.name}</strong></div>
+          <div style={{borderRadius:14,overflow:"hidden",marginBottom:14,border:`1px solid ${sub.color}40`}}>
+            <img src={`data:image/jpeg;base64,${uploaded?.b64}`} alt="Answer paper" style={{width:"100%",display:"block"}}/>
+          </div>
+          <button className="btn btn-orange" onClick={evaluate} disabled={evalLoading}>
+            {evalLoading?"⏳ AI is evaluating your answers...":"🤖 Evaluate My Answers"}
+          </button>
+          {evalLoading&&<div className="typing" style={{justifyContent:"center",marginBottom:12}}><div className="dot"/><div className="dot"/><div className="dot"/></div>}
+          <button className="btn btn-ghost" onClick={()=>{setUploaded(null);setStage("paper");}}>← Re-upload</button>
+        </>}
+
+        {stage==="result"&&<>
+          <div style={{background:`linear-gradient(135deg,${sub.color}15,#060818)`,border:`1.5px solid ${sub.color}40`,borderRadius:16,padding:16,marginBottom:14}}>
+            <div style={{fontFamily:"'Baloo 2',cursive",fontSize:16,fontWeight:900,color:sub.color,marginBottom:12}}>📊 AI Evaluation Result</div>
+            <div className="ai-eval" style={{background:"transparent",border:"none",padding:0}}>{evalResult}</div>
+          </div>
+          <button className="btn btn-orange" onClick={()=>{setUploaded(null);setEvalResult("");setStage("paper");}}>🔄 Try New Exam</button>
+          <button className="btn btn-ghost" onClick={onBack}>← Back to Study</button>
+        </>}
+      </div>
+    </div>
+  </>);
+}
